@@ -50,37 +50,66 @@ export default function Home() {
 </section>
 
 
-<section className="mission">
-  <div className="wrap">
+<section className="mission" style={{ position: 'relative', overflow: 'hidden' }}>
+  <img src="/expertise-bg.webp" alt="Legal expertise background" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: -1, opacity: 0.12, mixBlendMode: 'luminosity' }} />
+  <div className="wrap" style={{ position: 'relative', zIndex: 1 }}>
     <p><span className="dim">At WassimGul, we deliver smart legal solutions through expertise, precision, and a client&#8209;focused mindset.</span> Backed by integrity and results, we support you every step of the way.</p>
   </div>
 </section>
 
 
-<section className="stats">
-  <div className="stats-in">
-    <div className="stat"><b>18+</b><span>Years in Practice</span></div>
-    <div className="vr"></div>
-    <div className="stat"><b>100+</b><span>Legal Matters Solved</span></div>
-    <div className="vr"></div>
-    <div className="scroller" aria-hidden="true">
-      <svg viewBox="0 0 100 100">
-        <defs><path id="ring" d="M50,50 m-34,0 a34,34 0 1,1 68,0 a34,34 0 1,1 -68,0"/></defs>
-        <text><textPath href="#ring" startOffset="0">SCROLL DOWN • SCROLL DOWN • </textPath></text>
-      </svg>
-      <i>↓</i>
+<section className="stats-section" style={{ position: 'relative', zIndex: 10, background: 'var(--cream)', borderTop: '1px solid var(--line-light)' }}>
+  <div className="stats" style={{ background: 'var(--cream)', border: 'none', position: 'relative', zIndex: 10 }}>
+    <div className="stats-in" style={{ padding: '60px var(--pad) 20px', maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '30px' }}>
+      
+      <div className="stat-group" style={{ display: 'flex', gap: '40px', flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+        <div className="stat" style={{ textAlign: 'left' }}>
+          <b style={{ color: 'var(--brown-deep)', fontSize: '2.8rem', fontFamily: "'Playfair Display', serif", fontWeight: 700, lineHeight: 1 }}>18+</b>
+          <span style={{ fontSize: '0.85rem', color: 'var(--muted)', display: 'block', marginTop: '6px' }}>Years in Practice</span>
+        </div>
+        <div className="vr" style={{ background: 'var(--line)', width: '1px', height: '60px' }}></div>
+        <div className="stat" style={{ textAlign: 'left', marginRight: '40px' }}>
+          <b style={{ color: 'var(--brown-deep)', fontSize: '2.8rem', fontFamily: "'Playfair Display', serif", fontWeight: 700, lineHeight: 1 }}>100+</b>
+          <span style={{ fontSize: '0.85rem', color: 'var(--muted)', display: 'block', marginTop: '6px' }}>Legal Matters Resolved</span>
+        </div>
+      </div>
+
+      <div className="stat-gap" style={{ width: '160px', flexShrink: 0 }}></div>
+
+      <div className="stat-group" style={{ display: 'flex', gap: '40px', flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
+        <div className="stat" style={{ textAlign: 'left', marginLeft: '40px' }}>
+          <b style={{ color: 'var(--brown-deep)', fontSize: '2.8rem', fontFamily: "'Playfair Display', serif", fontWeight: 700, lineHeight: 1 }}>95%</b>
+          <span style={{ fontSize: '0.85rem', color: 'var(--muted)', display: 'block', marginTop: '6px' }}>Client Approval</span>
+        </div>
+        <div className="vr" style={{ background: 'var(--line)', width: '1px', height: '60px' }}></div>
+        <div className="stat" style={{ textAlign: 'left' }}>
+          <b style={{ color: 'var(--brown-deep)', fontSize: '2.8rem', fontFamily: "'Playfair Display', serif", fontWeight: 700, lineHeight: 1 }}>6K+</b>
+          <span style={{ fontSize: '0.85rem', color: 'var(--muted)', display: 'block', marginTop: '6px' }}>Clients Worldwide</span>
+        </div>
+      </div>
+
     </div>
-    <div className="vr"></div>
-    <div className="stat"><b>95%</b><span>Client Approval</span></div>
-    <div className="vr"></div>
-    <div className="stat"><b>6K+</b><span>Clients Worldwide</span></div>
+  </div>
+
+  <div style={{ position: 'absolute', bottom: '-75px', left: '50%', transform: 'translateX(-50%)', zIndex: 20 }}>
+    <div className="scroller" aria-hidden="true" style={{ width: '150px', height: '150px', borderRadius: '50%', background: '#3F2C18', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '6px solid var(--cream)' }}>
+      <svg viewBox="0 0 100 100" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', animation: 'spin 18s linear infinite', fill: 'transparent' }}>
+        <defs><path id="ring-path" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0"/></defs>
+        <text style={{ fontSize: '11px', fill: '#E7D8C5', letterSpacing: '2px', fontWeight: 600 }}><textPath href="#ring-path" startOffset="0">SCROLL DOWN • SCROLL DOWN • </textPath></text>
+      </svg>
+      <div style={{ width: '74px', height: '74px', borderRadius: '50%', background: '#F5EEE0', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 4L12 20M12 20L5 13M12 20L19 13" stroke="#3F2C18" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </div>
+    </div>
   </div>
 </section>
 
 
 <div className="band">
-  <img src="https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&w=1800&q=70"
-       alt="Law library shelves lined with legal volumes" loading="lazy" width="1800" height="1200" />
+  <img src="/library-bg.webp"
+       alt="Law library shelves lined with legal volumes" loading="lazy" />
 </div>
 
 
