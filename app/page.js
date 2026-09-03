@@ -50,9 +50,8 @@ export default function Home() {
 </section>
 
 
-<section className="mission" style={{ position: 'relative', overflow: 'hidden' }}>
-  <img src="/expertise-bg.webp" alt="Legal expertise background" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: -1, opacity: 0.12, mixBlendMode: 'luminosity' }} />
-  <div className="wrap" style={{ position: 'relative', zIndex: 1 }}>
+<section className="mission">
+  <div className="wrap">
     <p><span className="dim">At WassimGul, we deliver smart legal solutions through expertise, precision, and a client&#8209;focused mindset.</span> Backed by integrity and results, we support you every step of the way.</p>
   </div>
 </section>
@@ -128,8 +127,8 @@ export default function Home() {
 
     <div className="about-body">
       <figure className="about-fig">
-        <img src="https://images.unsplash.com/photo-1505547828843-176834e42154?auto=format&fit=crop&w=900&q=70"
-             alt="Stone columns of a courthouse portico" loading="lazy" width="900" height="1200" />
+        <img src="/about-bg.webp"
+             alt="About WassimGul" loading="lazy" />
       </figure>
 
       <div className="acc" id="acc">
