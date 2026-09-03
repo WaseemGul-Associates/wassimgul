@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LexCore — Your Legal Partner In Every Situation</title>
+<meta name="description" content="LexCore delivers smart legal solutions through expertise, precision and a client-focused mindset. Criminal defense, corporate, family law and legal consultation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --cream:#F7F2E9;
+  --cream-2:#F1E9DA;
+  --brown-deep:#3B2A0E;
+  --brown:#5A421A;
+  --gold:#A8813F;
+  --gold-soft:#C7A671;
+  --ink:#241A08;
+  --muted:#7C6E58;
+  --line:rgba(59,42,14,.16);
+  --line-light:rgba(255,255,255,.16);
+  --maxw:1280px;
+  --pad:56px;
+  --r:6px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--cream);color:var(--ink);
+  line-height:1.6;overflow-x:hidden;
+}
+img{display:block;max-width:100%}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:3px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+
+/* ============ SHARED TYPE ============ */
+.eyebrow{
+  font-size:.72rem;color:var(--gold);font-weight:600;
+  letter-spacing:.08em;margin-bottom:14px;
+}
+.eyebrow::before{content:"// ";opacity:.7}
+.eyebrow.on-dark{color:var(--gold-soft)}
+.h-sec{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:clamp(1.65rem,2.9vw,2.5rem);
+  font-weight:600;line-height:1.22;letter-spacing:-.01em;
+  max-width:19ch;
+}
+.p-sec{font-size:.9rem;color:var(--muted);line-height:1.85;max-width:46ch}
+
+/* ============ BUTTONS ============ */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 26px;border-radius:var(--r);
+  font-size:.85rem;font-weight:500;text-decoration:none;
+  border:1px solid transparent;cursor:pointer;
+  font-family:inherit;transition:background .18s,color .18s,border-color .18s;
+}
+.btn-solid{background:var(--brown-deep);color:#F7F2E9}
+.btn-solid:hover{background:var(--gold)}
+.btn-line{border-color:var(--line);color:var(--ink);background:transparent}
+.btn-line:hover{background:var(--brown-deep);color:#F7F2E9;border-color:var(--brown-deep)}
+.btn-light{background:var(--cream);color:var(--brown-deep)}
+.btn-light:hover{background:var(--gold-soft)}
+.btn .arw{font-size:.78em;transform:translateY(-1px)}
+
+/* ============ NAV ============ */
+.nav{
+  position:fixed;inset:0 0 auto 0;z-index:60;
+  background:rgba(247,242,233,.94);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.nav-in{
+  max-width:var(--maxw);margin:0 auto;padding:14px var(--pad);
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+.logo{
+  font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;
+  text-decoration:none;letter-spacing:-.02em;
+}
+.logo i{color:var(--gold);font-style:normal}
+.nav-menu{display:flex;align-items:center;gap:30px;list-style:none}
+.nav-menu a:not(.btn){font-size:.85rem;text-decoration:none;color:var(--ink);opacity:.82}
+.nav-menu a:not(.btn):hover{opacity:1;color:var(--gold)}
+.nav-menu a.here{opacity:1;font-weight:500}
+.nav-menu a.here::before{content:"• ";color:var(--gold)}
+.burger{
+  display:none;flex-direction:column;gap:5px;
+  background:none;border:0;padding:8px;cursor:pointer;
+}
+.burger span{display:block;width:22px;height:1.5px;background:var(--ink);transition:.25s}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+/* ============ HERO ============ */
+.hero{position:relative;padding:130px 0 0;text-align:center;overflow:hidden}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.1rem,5.4vw,4.15rem);
+  font-weight:700;line-height:1.06;letter-spacing:-.015em;
+  text-transform:uppercase;max-width:100%;margin:0 auto 18px;
+}
+.hero-sub{
+  font-size:.85rem;color:var(--muted);line-height:1.8;
+  max-width:52ch;margin:0 auto 26px;
+}
+.hero-stage{position:relative;margin-top:44px}
+.hero-word{
+  position:absolute;left:50%;bottom:-1.5vw;transform:translateX(-50%);
+  font-family:'Playfair Display',serif;font-size:19vw;font-weight:800;
+  letter-spacing:-.02em;line-height:.8;color:rgba(59,42,14,.09);
+  white-space:nowrap;user-select:none;pointer-events:none;z-index:0;
+}
+.hero-frame{
+  position:relative;z-index:1;
+  width:min(420px,65vw);margin:0 auto;
+  border:1px solid var(--line);border-bottom:0;
+  padding:16px 16px 0;background:transparent;
+}
+.hero-frame img{width:100%;height:auto}
+.hero-side{
+  position:absolute;bottom:22%;z-index:2;
+  font-size:.72rem;color:var(--muted);line-height:1.7;
+  max-width:210px;text-align:left;
+}
+.hero-side b{color:var(--brown-deep);font-weight:600}
+.hero-side.l{left:0}
+.hero-side.r{right:0;display:flex;gap:14px}
+.seal{
+  width:74px;height:74px;flex:0 0 74px;border-radius:50%;
+  border:1px solid var(--line);display:grid;place-content:center;
+  text-align:center;font-size:.54rem;color:var(--muted);line-height:1.45;padding:6px;
+}
+.seal b{display:block;font-family:'Playfair Display',serif;font-size:.82rem;color:var(--gold);font-weight:700}
+
+/* ============ MISSION ============ */
+.mission{padding:80px 0 64px;text-align:center}
+.mission p{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.15rem,2.35vw,1.95rem);
+  font-weight:500;line-height:1.5;max-width:34ch;margin:0 auto;
+}
+.mission .dim{color:rgba(36,26,8,.3)}
+
+/* ============ STATS ============ */
+.stats{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stats-in{
+  max-width:var(--maxw);margin:0 auto;padding:30px var(--pad);
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+}
+.stat{flex:1;text-align:center}
+.stat b{
+  display:block;font-family:'Playfair Display',serif;
+  font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:700;line-height:1;
+}
+.stat span{display:block;font-size:.74rem;color:var(--muted);margin-top:7px}
+.vr{width:1px;align-self:stretch;background:var(--line)}
+.scroller{
+  flex:0 0 auto;width:86px;height:86px;border-radius:50%;
+  border:1px solid var(--gold);display:grid;place-items:center;
+  position:relative;background:var(--cream);
+}
+.scroller svg{position:absolute;inset:0;width:100%;height:100%;animation:spin 18s linear infinite}
+.scroller svg text{font-size:8.4px;letter-spacing:2.1px;fill:var(--gold);font-weight:500}
+.scroller i{font-style:normal;font-size:1rem;color:var(--gold)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ============ PHOTO BAND ============ */
+.band{position:relative;height:clamp(300px,42vw,520px);overflow:hidden;background:var(--brown-deep)}
+.band img{width:100%;height:100%;object-fit:cover;opacity:.42}
+.band::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(59,42,14,.55),rgba(36,26,8,.75));
+}
+
+/* ============ SPLIT HEADER ============ */
+.sec-head{
+  display:grid;grid-template-columns:1.05fr .95fr;gap:56px;
+  align-items:end;margin-bottom:46px;
+}
+.sec-head .side{padding-bottom:4px}
+.sec-head .side .p-sec{margin-bottom:22px}
+
+/* ============ ABOUT ============ */
+.about{padding:96px 0}
+.about-body{display:grid;grid-template-columns:.9fr 1.1fr;gap:60px;align-items:center}
+.about-fig{position:relative;border-radius:var(--r);overflow:hidden}
+.about-fig img{width:100%;height:clamp(300px,38vw,430px);object-fit:cover}
+.acc{border-left:1px solid var(--line);padding-left:34px}
+.acc-item{border-bottom:1px solid var(--line)}
+.acc-item:first-child{border-top:1px solid var(--line)}
+.acc-btn{
+  width:100%;background:none;border:0;padding:20px 0;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  font-family:'Playfair Display',serif;font-size:1.12rem;font-weight:600;
+  color:var(--ink);text-align:left;
+}
+.acc-btn .pm{font-family:'Inter',sans-serif;font-size:1.15rem;color:var(--gold);transition:transform .25s}
+.acc-item.open .acc-btn .pm{transform:rotate(45deg)}
+.acc-panel{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.acc-item.open .acc-panel{max-height:230px}
+.acc-panel p{font-size:.85rem;color:var(--muted);line-height:1.85;padding-bottom:20px;max-width:52ch}
+
+/* ============ SERVICES ============ */
+.services{padding:96px 0;background:var(--cream-2)}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.card{
+  background:var(--cream);border:1px solid var(--line);
+  border-radius:var(--r);padding:28px 24px 24px;
+  display:flex;flex-direction:column;
+}
+.card.feature{background:var(--brown-deep);border-color:var(--brown-deep);color:#EDE3D2}
+.card-ico{font-size:1.35rem;color:var(--gold);margin-bottom:24px;line-height:1}
+.card.feature .card-ico{color:var(--gold-soft)}
+.card h3{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:600;margin-bottom:10px}
+.card p{font-size:.79rem;line-height:1.8;color:var(--muted);margin-bottom:22px;flex:1}
+.card.feature p{color:rgba(237,227,210,.72)}
+.card .btn{align-self:flex-start;padding:9px 18px;font-size:.76rem}
+.card.feature .btn{border-color:var(--line-light);color:#EDE3D2}
+.card.feature .btn:hover{background:var(--cream);color:var(--brown-deep);border-color:var(--cream)}
+.sec-foot{display:flex;justify-content:center;margin-top:40px}
+
+/* ============ TEAM ============ */
+.team{padding:96px 0;background:var(--brown-deep);color:#EDE3D2}
+.team .h-sec{color:#F5EEE0}
+.team .p-sec{color:rgba(237,227,210,.66)}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.member{border:1px solid var(--line-light);border-radius:var(--r);padding:12px;background:rgba(255,255,255,.03)}
+.member img{width:100%;height:clamp(250px,26vw,330px);object-fit:cover;object-position:center 18%;border-radius:3px}
+.member h3{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;margin:16px 0 3px}
+.member span{font-size:.76rem;color:rgba(237,227,210,.55)}
+
+/* ============ STORIES ============ */
+.stories{padding:96px 0;background:var(--cream-2)}
+.stories-body{display:grid;grid-template-columns:150px 1fr;gap:28px;align-items:start}
+.thumbs{display:flex;flex-direction:column;gap:14px}
+.thumb{
+  border:0;padding:0;background:none;cursor:pointer;border-radius:var(--r);
+  overflow:hidden;opacity:.42;transition:opacity .2s;
+  outline-offset:3px;
+}
+.thumb img{width:100%;height:118px;object-fit:cover;display:block}
+.thumb[aria-selected="true"]{opacity:1;box-shadow:0 0 0 1.5px var(--gold)}
+.thumb:hover{opacity:.8}
+.quote{background:var(--brown-deep);color:#EDE3D2;border-radius:var(--r);padding:40px}
+.quote blockquote{
+  font-family:'Playfair Display',serif;font-size:clamp(1.1rem,1.9vw,1.5rem);
+  font-weight:500;line-height:1.5;margin-bottom:20px;max-width:26ch;
+}
+.quote .detail{font-size:.83rem;line-height:1.85;color:rgba(237,227,210,.62);max-width:52ch;margin-bottom:28px}
+.byline{
+  background:rgba(255,255,255,.07);border-radius:var(--r);
+  padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.byline b{display:block;font-size:.9rem;font-weight:600}
+.byline span{font-size:.75rem;color:rgba(237,227,210,.55)}
+.byline .stars{color:var(--gold-soft);font-size:.85rem;letter-spacing:2px;white-space:nowrap}
+
+/* ============ CONTACT ============ */
+.contact{padding:96px 0}
+.contact-body{display:grid;grid-template-columns:1.02fr .98fr;gap:56px;align-items:start}
+.form{margin-top:30px}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:22px}
+.f{display:flex;flex-direction:column}
+.f label{font-size:.72rem;color:var(--muted);margin-bottom:7px}
+.f input,.f select,.f textarea{
+  font-family:inherit;font-size:.86rem;color:var(--ink);
+  background:transparent;border:0;border-bottom:1px solid var(--line);
+  padding:8px 0;outline:none;transition:border-color .2s;width:100%;
+}
+.f textarea{resize:vertical;min-height:64px}
+.f input:focus,.f select:focus,.f textarea:focus{border-bottom-color:var(--gold)}
+.f input::placeholder,.f textarea::placeholder{color:rgba(124,110,88,.5)}
+.contact-fig img{width:100%;height:clamp(340px,46vw,600px);object-fit:cover;border-radius:var(--r)}
+.form-note{font-size:.72rem;color:var(--muted);margin-top:14px}
+
+/* ============ FOOTER ============ */
+.foot{background:var(--brown-deep);color:rgba(237,227,210,.62);position:relative;overflow:hidden}
+.foot-top{
+  max-width:var(--maxw);margin:0 auto;padding:70px var(--pad) 0;
+  display:grid;grid-template-columns:1.5fr .8fr 1fr 1.2fr;gap:44px;
+  position:relative;z-index:1;
+}
+.foot .logo{color:#F5EEE0;display:inline-block;margin-bottom:14px}
+.foot-tag{font-size:.8rem;line-height:1.8;max-width:30ch}
+.foot h4{font-family:'Playfair Display',serif;font-size:.98rem;color:#F5EEE0;font-weight:600;margin-bottom:18px}
+.foot-links{list-style:none;display:flex;flex-direction:column;gap:11px}
+.foot-links a{font-size:.8rem;text-decoration:none;color:rgba(237,227,210,.62)}
+.foot-links a:hover{color:var(--gold-soft)}
+.foot-c{display:flex;gap:10px;font-size:.8rem;line-height:1.7;margin-bottom:13px}
+.foot-c i{font-style:normal;opacity:.65;flex:0 0 16px}
+.socials{display:flex;gap:9px;margin-top:16px}
+.socials a{
+  width:33px;height:33px;border:1px solid var(--line-light);border-radius:50%;
+  display:grid;place-items:center;font-size:.72rem;text-decoration:none;
+  color:rgba(237,227,210,.62);
+}
+.socials a:hover{border-color:var(--gold-soft);color:var(--gold-soft)}
+.foot-mark{
+  font-family:'Playfair Display',serif;font-weight:800;
+  font-size:clamp(4rem,16.5vw,15rem);line-height:.78;letter-spacing:-.03em;
+  color:rgba(237,227,210,.07);text-align:center;
+  margin-top:44px;user-select:none;pointer-events:none;
+}
+.foot-bar{
+  border-top:1px solid var(--line-light);position:relative;z-index:1;
+}
+.foot-bar-in{
+  max-width:var(--maxw);margin:0 auto;padding:17px var(--pad);
+  display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:.75rem;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1080px){
+  :root{--pad:32px}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .foot-top{grid-template-columns:1fr 1fr;gap:36px}
+}
+@media (max-width:860px){
+  .burger{display:flex}
+  .nav-menu{
+    display:none;position:absolute;top:100%;left:0;right:0;
+    flex-direction:column;align-items:flex-start;gap:0;
+    background:var(--cream);border-bottom:1px solid var(--line);
+    padding:8px var(--pad) 20px;
+  }
+  .nav-menu.open{display:flex}
+  .nav-menu li{width:100%}
+  .nav-menu li a:not(.btn){display:block;padding:13px 0;border-bottom:1px solid var(--line)}
+  .nav-menu .btn{margin-top:16px}
+
+  .hero{padding-top:104px}
+  .hero-stage{margin-top:34px;padding-bottom:8px}
+  .hero-frame{width:min(250px,64vw)}
+  .hero-word{font-size:26vw;bottom:-2vw}
+  .hero-side{position:static;max-width:none;text-align:center;margin:0 auto}
+  .hero-side.l{margin-top:26px}
+  .hero-side.r{justify-content:center;margin-top:22px}
+
+  .stats-in{flex-wrap:wrap;justify-content:center;gap:26px 32px;padding:34px var(--pad)}
+  .stat{flex:0 0 40%}
+  .vr{display:none}
+  .scroller{order:9}
+
+  .sec-head{grid-template-columns:1fr;gap:22px;align-items:start}
+  .about-body{grid-template-columns:1fr;gap:36px}
+  .acc{border-left:0;padding-left:0}
+  .cards{grid-template-columns:1fr}
+  .team-grid{grid-template-columns:1fr;gap:18px}
+  .stories-body{grid-template-columns:1fr;gap:20px}
+  .thumbs{flex-direction:row}
+  .thumb{flex:1}
+  .thumb img{height:88px}
+  .quote{padding:28px 24px}
+  .byline{flex-direction:column;align-items:flex-start;gap:10px}
+  .contact-body{grid-template-columns:1fr;gap:36px}
+  .contact-fig{order:-1}
+  .about,.services,.team,.stories,.contact{padding:64px 0}
+  .foot-top{grid-template-columns:1fr;gap:32px;padding-top:52px}
+  .foot-bar-in{flex-direction:column;text-align:center;align-items:center}
+}
+@media (max-width:520px){
+  :root{--pad:20px}
+  .f-row{grid-template-columns:1fr;gap:20px}
+  .stat{flex:0 0 42%}
+  .hero-side.r{flex-wrap:wrap}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ======= NAV ======= -->
+<header class="nav">
+  <div class="nav-in">
+    <a href="#top" class="logo">LexCore<i>.</i></a>
+    <nav>
+      <ul class="nav-menu" id="menu">
+        <li><a href="#top" class="here">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#stories">Case Study</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact" class="btn btn-solid">Contact Us</a></li>
+      </ul>
+    </nav>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ======= HERO ======= -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <h1>Your legal partner<br>in every situation</h1>
+    <p class="hero-sub">From complex disputes to everyday legal matters, we deliver strategic solutions with a client-first approach. We stand by you to protect what matters most.</p>
+    <a href="#contact" class="btn btn-solid">Book a Free Consultation</a>
+
+    <div class="hero-stage">
+      <div class="hero-word" aria-hidden="true">LAWYER</div>
+
+      <p class="hero-side l">Our legal team brings <b>30+ years</b> of combined expertise, having represented clients in over <b>12,000 criminal</b> matters.</p>
+
+      <div class="hero-frame">
+        <img src="assets/lady-justice.webp" alt="Bronze statue of Lady Justice holding scales and a sword" width="600" height="648">
+      </div>
+
+      <div class="hero-side r">
+        <div class="seal"><b>★★★★★</b>Top Advocate<br>2021–2024</div>
+        <div class="seal"><b>ABA</b>Trusted Lawyer<br>2021–2024</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= MISSION ======= -->
+<section class="mission">
+  <div class="wrap">
+    <p><span class="dim">At LexCore, we deliver smart legal solutions through expertise, precision, and a client&#8209;focused mindset.</span> Backed by integrity and results, we support you every step of the way.</p>
+  </div>
+</section>
+
+<!-- ======= STATS ======= -->
+<section class="stats">
+  <div class="stats-in">
+    <div class="stat"><b>18+</b><span>Years in Practice</span></div>
+    <div class="vr"></div>
+    <div class="stat"><b>100+</b><span>Legal Matters Solved</span></div>
+    <div class="vr"></div>
+    <div class="scroller" aria-hidden="true">
+      <svg viewBox="0 0 100 100">
+        <defs><path id="ring" d="M50,50 m-34,0 a34,34 0 1,1 68,0 a34,34 0 1,1 -68,0"/></defs>
+        <text><textPath href="#ring" startOffset="0">SCROLL DOWN • SCROLL DOWN • </textPath></text>
+      </svg>
+      <i>↓</i>
+    </div>
+    <div class="vr"></div>
+    <div class="stat"><b>95%</b><span>Client Approval</span></div>
+    <div class="vr"></div>
+    <div class="stat"><b>6K+</b><span>Clients Worldwide</span></div>
+  </div>
+</section>
+
+<!-- ======= PHOTO BAND ======= -->
+<div class="band">
+  <img src="https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&w=1800&q=70"
+       alt="Law library shelves lined with legal volumes" loading="lazy" width="1800" height="1200">
+</div>
+
+<!-- ======= ABOUT ======= -->
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">About Us</p>
+        <h2 class="h-sec">Delivering trusted legal expertise with integrity and precision</h2>
+      </div>
+      <div class="side">
+        <p class="p-sec">Driven by integrity and backed by experience, LexCore offers personalised legal support designed to guide you through every challenge with confidence.</p>
+        <a href="#contact" class="btn btn-solid">Learn More <span class="arw">↗</span></a>
+      </div>
+    </div>
+
+    <div class="about-body">
+      <figure class="about-fig">
+        <img src="https://images.unsplash.com/photo-1505547828843-176834e42154?auto=format&fit=crop&w=900&q=70"
+             alt="Stone columns of a courthouse portico" loading="lazy" width="900" height="1200">
+      </figure>
+
+      <div class="acc" id="acc">
+        <div class="acc-item open">
+          <button class="acc-btn" aria-expanded="true">Integrity <span class="pm">+</span></button>
+          <div class="acc-panel">
+            <p>We uphold the highest ethical standards in every case we handle. Our commitment to honesty and accountability ensures trust, reliability and strong legal representation.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-btn" aria-expanded="false">Transparency <span class="pm">+</span></button>
+          <div class="acc-panel">
+            <p>You will always know where your case stands. We explain strategy in plain language, share costs upfront and keep you informed at every stage.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-btn" aria-expanded="false">Collaboration <span class="pm">+</span></button>
+          <div class="acc-panel">
+            <p>We work alongside you, not around you. Your priorities shape the strategy, and our specialists work as one team to reach the outcome you need.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= SERVICES ======= -->
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">What We Offer</p>
+        <h2 class="h-sec">Effective legal defense backed by experience and precision</h2>
+      </div>
+      <div class="side">
+        <p class="p-sec">With a commitment to excellence, we deliver defense solutions that are thoughtful, precise and focused on achieving the best possible results for our clients.</p>
+        <a href="#contact" class="btn btn-solid">All Services <span class="arw">↗</span></a>
+      </div>
+    </div>
+
+    <div class="cards">
+      <article class="card feature">
+        <div class="card-ico">⚖</div>
+        <h3>Criminal Defense</h3>
+        <p>We're here to guide you through every step of your criminal case, aiming for the best possible result.</p>
+        <a href="#contact" class="btn btn-line">Read More <span class="arw">↗</span></a>
+      </article>
+      <article class="card">
+        <div class="card-ico">◈</div>
+        <h3>Corporate Law</h3>
+        <p>Access straightforward, professional support for contracts, compliance and governance.</p>
+        <a href="#contact" class="btn btn-line">Read More <span class="arw">↗</span></a>
+      </article>
+      <article class="card">
+        <div class="card-ico">◇</div>
+        <h3>Family Law</h3>
+        <p>Our team works hard to provide expert legal help in sensitive cases and achieve the best results for you.</p>
+        <a href="#contact" class="btn btn-line">Read More <span class="arw">↗</span></a>
+      </article>
+      <article class="card">
+        <div class="card-ico">✦</div>
+        <h3>Legal Consultation</h3>
+        <p>Need legal help? Our experts guide you clearly, keeping you confident and informed.</p>
+        <a href="#contact" class="btn btn-line">Read More <span class="arw">↗</span></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ======= TEAM ======= -->
+<section class="team" id="team">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow on-dark">Our Legal Experts</p>
+        <h2 class="h-sec">Meet the professionals delivering trusted legal support</h2>
+      </div>
+      <div class="side">
+        <p class="p-sec">We bring together expertise, clarity and strategic thinking to deliver effective legal solutions. Every step is guided by trust, transparency and a commitment to your success.</p>
+        <a href="#contact" class="btn btn-light">View Our Team <span class="arw">↗</span></a>
+      </div>
+    </div>
+
+    <div class="team-grid">
+      <article class="member">
+        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=70"
+             alt="Alexander Reed" loading="lazy" width="600" height="800">
+        <h3>Alexander Reed</h3><span>Senior Advocate</span>
+      </article>
+      <article class="member">
+        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=600&q=70"
+             alt="Olivia Bennett" loading="lazy" width="600" height="800">
+        <h3>Olivia Bennett</h3><span>Legal Advisor</span>
+      </article>
+      <article class="member">
+        <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=600&q=70"
+             alt="Daniel Carter" loading="lazy" width="600" height="800">
+        <h3>Daniel Carter</h3><span>Associate Lawyer</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ======= SUCCESS STORIES ======= -->
+<section class="stories" id="stories">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">Success Stories</p>
+        <h2 class="h-sec">Powerful success stories driven by strategy and experience</h2>
+      </div>
+      <div class="side">
+        <p class="p-sec">We approach every case with strategy and experience, turning complex challenges into successful outcomes through focused and effective legal solutions.</p>
+        <a href="#contact" class="btn btn-solid">View Success Stories <span class="arw">↗</span></a>
+      </div>
+    </div>
+
+    <div class="stories-body">
+      <div class="thumbs" id="thumbs" role="tablist" aria-label="Client stories">
+        <button class="thumb" role="tab" aria-selected="false" data-i="0">
+          <img src="https://images.unsplash.com/photo-1581065178047-8ee15951ede6?auto=format&fit=crop&w=300&q=70" alt="Priya Raman" loading="lazy">
+        </button>
+        <button class="thumb" role="tab" aria-selected="true" data-i="1">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=70" alt="Michael Anderson" loading="lazy">
+        </button>
+        <button class="thumb" role="tab" aria-selected="false" data-i="2">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=70" alt="Tom Whitaker" loading="lazy">
+        </button>
+      </div>
+
+      <div class="quote" role="tabpanel">
+        <blockquote id="q-text">“Highly professional and reliable. The team handled my case with clarity and delivered exactly what I needed.”</blockquote>
+        <p class="detail" id="q-detail">From the initial consultation to the final outcome, the process was smooth and transparent. Their attention to detail, clear communication and strategic approach made a real difference in achieving the result I was looking for.</p>
+        <div class="byline">
+          <div>
+            <b id="q-name">Michael Anderson</b>
+            <span id="q-role">Real Estate Investor · Dubai, UAE</span>
+          </div>
+          <div class="stars" aria-label="5 out of 5">★★★★★</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= CONTACT ======= -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="contact-body">
+      <div>
+        <h2 class="h-sec">Schedule a consultation with our legal experts</h2>
+        <p class="p-sec" style="margin-top:16px">Take the first step toward resolving your legal matters with confidence. Our team is ready to provide clear guidance, strategic advice and reliable support tailored to your needs.</p>
+
+        <form class="form" id="form" novalidate>
+          <div class="f-row">
+            <div class="f"><label for="fn">First Name</label><input id="fn" name="firstName" type="text" placeholder="John" required></div>
+            <div class="f"><label for="ln">Last Name</label><input id="ln" name="lastName" type="text" placeholder="Doe" required></div>
+          </div>
+          <div class="f-row">
+            <div class="f"><label for="em">Email Address</label><input id="em" name="email" type="email" placeholder="john@example.com" required></div>
+            <div class="f"><label for="ph">Phone Number</label><input id="ph" name="phone" type="tel" placeholder="+44 000 000 0000"></div>
+          </div>
+          <div class="f-row">
+            <div class="f">
+              <label for="sv">Select Service</label>
+              <select id="sv" name="service" required>
+                <option value="">Choose a service</option>
+                <option>Criminal Defense</option>
+                <option>Corporate Law</option>
+                <option>Family Law</option>
+                <option>Legal Consultation</option>
+              </select>
+            </div>
+            <div class="f"><label for="dt">Preferred Date</label><input id="dt" name="date" type="date"></div>
+          </div>
+          <div class="f" style="margin-bottom:22px">
+            <label for="ms">Message</label>
+            <textarea id="ms" name="message" rows="3" placeholder="Briefly describe your legal matter"></textarea>
+          </div>
+          <button type="submit" class="btn btn-solid">Confirm your appointment</button>
+          <p class="form-note" id="note" role="status"></p>
+        </form>
+      </div>
+
+      <figure class="contact-fig">
+        <img src="https://images.unsplash.com/photo-1562564055-71e051d33c19?auto=format&fit=crop&w=900&q=70"
+             alt="A lawyer reviewing documents with a client" loading="lazy" width="900" height="1200">
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ======= FOOTER ======= -->
+<footer class="foot">
+  <div class="foot-top">
+    <div>
+      <a href="#top" class="logo">LexCore<i>.</i></a>
+      <p class="foot-tag">Reliable legal solutions focused on protecting your rights, with clarity, integrity and results.</p>
+      <div class="socials">
+        <a href="#" aria-label="Facebook">f</a>
+        <a href="#" aria-label="X">𝕏</a>
+        <a href="#" aria-label="Instagram">ig</a>
+        <a href="#" aria-label="LinkedIn">in</a>
+      </div>
+    </div>
+
+    <div>
+      <h4>Quick Links</h4>
+      <ul class="foot-links">
+        <li><a href="#top">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#team">Our Team</a></li>
+        <li><a href="#stories">Case Study</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4>Services</h4>
+      <ul class="foot-links">
+        <li><a href="#services">Criminal Defense</a></li>
+        <li><a href="#services">Civil Litigation</a></li>
+        <li><a href="#services">Corporate Law</a></li>
+        <li><a href="#services">Family Law</a></li>
+        <li><a href="#services">Property Law</a></li>
+        <li><a href="#services">Legal Consultation</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4>Contact Info</h4>
+      <p class="foot-c"><i>☏</i><a href="tel:+445598210518" style="text-decoration:none">+44 559 821 0518</a></p>
+      <p class="foot-c"><i>✉</i><a href="mailto:info@lexcore.co.in" style="text-decoration:none">info@lexcore.co.in</a></p>
+      <p class="foot-c"><i>⌖</i><span>London, United Kingdom</span></p>
+    </div>
+  </div>
+
+  <div class="foot-mark" aria-hidden="true">LexCore.</div>
+
+  <div class="foot-bar">
+    <div class="foot-bar-in">
+      <span>Designed &amp; built by Nexa Solutions</span>
+      <span>© 2026 LexCore Legal. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* --- mobile nav --- */
+  var burger = document.getElementById('burger'),
+      menu   = document.getElementById('menu');
+  burger.addEventListener('click', function () {
+    var open = menu.classList.toggle('open');
+    burger.setAttribute('aria-expanded', open);
+    burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  menu.addEventListener('click', function (e) {
+    if (e.target.closest('a') && window.innerWidth <= 860) {
+      menu.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  /* --- values accordion --- */
+  document.getElementById('acc').addEventListener('click', function (e) {
+    var btn = e.target.closest('.acc-btn');
+    if (!btn) return;
+    var item = btn.parentElement,
+        isOpen = item.classList.contains('open');
+    this.querySelectorAll('.acc-item').forEach(function (i) {
+      i.classList.remove('open');
+      i.querySelector('.acc-btn').setAttribute('aria-expanded', 'false');
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  });
+
+  /* --- testimonials --- */
+  var stories = [
+    { q: '“They turned a case I thought was lost into a settlement I could actually live with.”',
+      d: 'I came in late, with paperwork in poor shape and very little time. The team rebuilt the file, found the arguments that mattered and negotiated firmly on my behalf. I never once felt like I was chasing them for an update.',
+      n: 'Priya Raman', r: 'Founder, Meridian Textiles · Bengaluru, India' },
+    { q: '“Highly professional and reliable. The team handled my case with clarity and delivered exactly what I needed.”',
+      d: 'From the initial consultation to the final outcome, the process was smooth and transparent. Their attention to detail, clear communication and strategic approach made a real difference in achieving the result I was looking for.',
+      n: 'Michael Anderson', r: 'Real Estate Investor · Dubai, UAE' },
+    { q: '“Plain English, honest cost estimates, and no surprises at any stage of the matter.”',
+      d: 'What stood out was the honesty. They told me early which parts of my claim were weak instead of billing me to find out later. That saved months and a good deal of money, and we still reached a strong outcome.',
+      n: 'Tom Whitaker', r: 'Operations Director · Manchester, UK' }
+  ];
+  var thumbs = document.getElementById('thumbs'),
+      els = { q: document.getElementById('q-text'), d: document.getElementById('q-detail'),
+              n: document.getElementById('q-name'), r: document.getElementById('q-role') };
+
+  thumbs.addEventListener('click', function (e) {
+    var btn = e.target.closest('.thumb');
+    if (!btn) return;
+    var s = stories[+btn.dataset.i];
+    this.querySelectorAll('.thumb').forEach(function (t) { t.setAttribute('aria-selected', 'false'); });
+    btn.setAttribute('aria-selected', 'true');
+    els.q.textContent = s.q; els.d.textContent = s.d;
+    els.n.textContent = s.n; els.r.textContent = s.r;
+  });
+
+  /* --- form (front-end only; wire up to your backend) --- */
+  document.getElementById('form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var note = document.getElementById('note');
+    if (!this.checkValidity()) {
+      note.textContent = 'Please fill in your name, email and the service you need.';
+      return;
+    }
+    note.textContent = 'Thanks — your request is ready to send. Connect this form to your mail handler to go live.';
+  });
+})();
+</script>
+</body>
+</html>
