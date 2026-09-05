@@ -21,7 +21,7 @@ create table public.site_settings (
 -- Ensure only one row can exist
 alter table public.site_settings add constraint single_row check (id = 1);
 -- Insert default row
-insert into public.site_settings (id, phone, email, address) values (1, '+44 559 821 0518', 'info@WassimGul.co.in', 'London, United Kingdom');
+insert into public.site_settings (id, phone, email, address) values (1, '+91-9324689553 / +91-7006323003', 'Waseemgll@gmail.com', 'J&K and Ladakh High Court, Srinagar');
 
 -- 3. Hero Content Table
 create table public.hero_content (

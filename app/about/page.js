@@ -12,16 +12,16 @@ export default function About() {
       <header className="nav">
         <div className="nav-in">
           <a href="/" className="logo" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
-            <img src="/wassimgul-logo.png" alt="WassimGul Logo" className="brand-img" />
+            <img src="/wassim-gul-logo.png" alt="WassimGul Logo" className="brand-img" />
             <span className="brand-txt">WassimGul<span style={{ color: 'var(--gold)' }}>.</span></span>
           </a>
           <nav>
             <ul className="nav-menu" id="menu">
               <li><a href="/">Home</a></li>
-              <li><a href="/#about">About Us</a></li>
+              <li><a href="/about" className="here">About</a></li>
+              <li><a href="/#stories">Case Study</a></li>
               <li><a href="/#services">Services</a></li>
-              <li><a href="/#team">Attorneys</a></li>
-              <li><a href="/#contact" className="btn btn-solid">Contact Us <span className="arw">↗</span></a></li>
+              <li><a href="/contact" className="btn btn-solid">Contact Us</a></li>
             </ul>
           </nav>
           <button className="burger" aria-label="Menu" aria-expanded="false" id="burger">
@@ -32,27 +32,9 @@ export default function About() {
 
       {/* HERO SECTION */}
       <section className="about-hero">
-        <img 
-          src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=1920&q=80" 
-          alt="Elegant law office" 
-          className="about-hero-bg" 
-        />
         <div className="about-hero-content">
           <h1>Our Legacy</h1>
           <p>Rooted in excellence and driven by an unwavering commitment to our clients, WassimGul stands as a beacon of strategic legal advocacy.</p>
-        </div>
-      </section>
-
-      {/* PHILOSOPHY */}
-      <section className="about-philosophy">
-        <div className="wrap">
-          <p className="eyebrow">Our Philosophy</p>
-          <blockquote>
-            “We don't just handle cases; we solve problems. Our approach merges rigorous legal strategy with a profound understanding of our clients' unique goals.”
-          </blockquote>
-          <p className="p-sec" style={{ margin: '0 auto' }}>
-            At WassimGul, we believe that exceptional legal representation requires more than just knowing the law. It requires knowing the people behind the cases, understanding the industries they operate in, and anticipating the challenges they face.
-          </p>
         </div>
       </section>
 
@@ -69,11 +51,24 @@ export default function About() {
               Over the years, we have successfully navigated complex legal landscapes for individuals and corporations alike, earning a reputation for meticulous preparation and relentless advocacy. Our team of seasoned attorneys brings decades of collective experience, ensuring that every client receives the premium representation they deserve.
             </p>
           </div>
-          <img 
-            src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1000&q=80" 
-            alt="Attorneys collaborating" 
-            className="about-journey-img" 
+          <img
+            src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1000&q=80"
+            alt="Attorneys collaborating"
+            className="about-journey-img"
           />
+        </div>
+      </section>
+
+      {/* PHILOSOPHY */}
+      <section className="about-philosophy">
+        <div className="wrap">
+          <p className="eyebrow">Our Philosophy</p>
+          <blockquote>
+            “We don't just handle cases; we solve problems. Our approach merges rigorous legal strategy with a profound understanding of our clients' unique goals.”
+          </blockquote>
+          <p className="p-sec" style={{ margin: '0 auto' }}>
+            At WassimGul, we believe that exceptional legal representation requires more than just knowing the law. It requires knowing the people behind the cases, understanding the industries they operate in, and anticipating the challenges they face.
+          </p>
         </div>
       </section>
 
@@ -107,7 +102,7 @@ export default function About() {
         <div className="foot-top">
           <div>
             <a href="/" className="logo" style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', marginBottom: '16px', textDecoration: 'none' }}>
-              <img src="/wassimgul-logo.png" alt="WassimGul Logo" className="brand-img" />
+              <img src="/wassim-gul-logo.png" alt="WassimGul Logo" className="brand-img" />
               <span className="brand-txt">WassimGul<span style={{ color: 'var(--gold)' }}>.</span></span>
             </a>
             <p className="foot-tag">Reliable legal solutions focused on protecting your rights, with clarity, integrity and results.</p>
@@ -132,14 +127,15 @@ export default function About() {
               <li><a href="/about">About Us</a></li>
               <li><a href="/#team">Our Team</a></li>
               <li><a href="/#about">Careers</a></li>
-              <li><a href="/#contact">Contact</a></li>
+              <li><a href="/contact">Contact</a></li>
             </ul>
           </div>
           <div>
             <h4>Contact Info</h4>
-            <p className="foot-c"><i>⚲</i>123 Legal Avenue, London, UK</p>
-            <p className="foot-c"><i>☏</i>+44 559 821 0518</p>
-            <p className="foot-c"><i>✉</i><a href="mailto:info@WassimGul.co.in" style={{textDecoration: 'none'}}>info@WassimGul.co.in</a></p>
+            <p className="foot-c"><i>⚲</i>J&amp;K and Ladakh High Court, Srinagar</p>
+            <p className="foot-c"><i>☏</i><a href="tel:+919324689553" style={{textDecoration: 'none'}}>+91-9324689553</a></p>
+            <p className="foot-c"><i>☏</i><a href="tel:+917006323003" style={{textDecoration: 'none'}}>+91-7006323003</a></p>
+            <p className="foot-c"><i>✉</i><a href="mailto:Waseemgll@gmail.com" style={{textDecoration: 'none'}}>Waseemgll@gmail.com</a></p>
           </div>
         </div>
         <div className="foot-mark" aria-hidden="true">WassimGul.</div>

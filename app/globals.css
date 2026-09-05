@@ -73,9 +73,13 @@ a{color:inherit}
   font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;
   text-decoration:none;letter-spacing:-.02em;
 }
+.brand-img {
+  height: 22px;
+  width: auto;
+}
 .logo i{color:var(--gold);font-style:normal}
 .nav-menu{display:flex;align-items:center;gap:30px;list-style:none}
-.nav-menu a:not(.btn){font-size:1.05rem;text-decoration:none;color:var(--ink);opacity:.82}
+.nav-menu a:not(.btn){font-size:0.92rem;text-decoration:none;color:var(--ink);opacity:.82}
 .nav-menu a:not(.btn):hover{opacity:1;color:var(--gold)}
 .nav-menu a.here{opacity:1;font-weight:500}
 .nav-menu a.here::before{content:"• ";color:var(--gold)}
@@ -258,7 +262,7 @@ a{color:inherit}
 .form{margin-top:30px}
 .f-row{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:22px}
 .f{display:flex;flex-direction:column}
-.f label{font-size:.72rem;color:var(--muted);margin-bottom:7px}
+.f label{font-size:.72rem;color:var(--ink);font-weight:600;margin-bottom:7px}
 .f input,.f select,.f textarea{
   font-family:inherit;font-size:1rem;color:var(--ink);
   background:transparent;border:0;border-bottom:1px solid var(--line);

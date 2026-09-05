@@ -1,13 +1,43 @@
+"use client";
+import { useState } from 'react';
+import ContactForm from '@/app/_components/ContactForm';
+
 export default function Home() {
+  const [openAcc, setOpenAcc] = useState(0);
+  const [activeTest, setActiveTest] = useState(1);
+
+  const testimonials = [
+    {
+      img: "https://images.unsplash.com/photo-1581065178047-8ee15951ede6?auto=format&fit=crop&w=300&q=70",
+      alt: "Priya Raman",
+      quote: "“Exceptional service and deep understanding of corporate law.”",
+      detail: "The team provided actionable insights that helped our startup navigate early-stage compliance without a hitch. Their dedication and clear communication were outstanding.",
+      name: "Priya Raman",
+      role: "Tech Startup Founder",
+    },
+    {
+      img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=70",
+      alt: "Michael Anderson",
+      quote: "“Highly professional and reliable. The team handled my case with clarity and delivered exactly what I needed.”",
+      detail: "From the initial consultation to the final outcome, the process was smooth and transparent. Their attention to detail, clear communication and strategic approach made a real difference in achieving the result I was looking for.",
+      name: "Michael Anderson",
+      role: "Real Estate Investor · Dubai, UAE",
+    },
+    {
+      img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=70",
+      alt: "Tom Whitaker",
+      quote: "“A dedicated team that fought for my rights every step of the way.”",
+      detail: "I was facing a difficult family dispute, and the firm provided compassionate yet assertive representation. They truly care about their clients' well-being.",
+      name: "Tom Whitaker",
+      role: "Private Client",
+    }
+  ];
+
   return (
-    <main>
-      
-
-
-<header className="nav">
+    <main><header className="nav">
   <div className="nav-in">
     <a href="#top" className="logo" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
-      <img src="/wassimgul-logo.png" alt="WassimGul Logo" className="brand-img" />
+      <img src="/wassim-gul-logo.png" alt="WassimGul Logo" className="brand-img" />
       <span className="brand-txt">WassimGul<span style={{ color: 'var(--gold)' }}>.</span></span>
     </a>
     <nav>
@@ -16,7 +46,7 @@ export default function Home() {
         <li><a href="/about">About</a></li>
         <li><a href="#stories">Case Study</a></li>
         <li><a href="#services">Services</a></li>
-        <li><a href="#contact" className="btn btn-solid">Contact Us</a></li>
+        <li><a href="/contact" className="btn btn-solid">Contact Us</a></li>
       </ul>
     </nav>
     <button className="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
@@ -30,7 +60,7 @@ export default function Home() {
   <div className="wrap">
     <h1>Your legal partner<br/>in every situation</h1>
     <p className="hero-sub">From complex disputes to everyday legal matters, we deliver strategic solutions with a client-first approach. We stand by you to protect what matters most.</p>
-    <a href="#contact" className="btn btn-solid">Book a Free Consultation</a>
+    <a href="/contact" className="btn btn-solid">Book a Free Consultation</a>
 
     <div className="hero-stage">
       <div className="hero-word" aria-hidden="true">LAWYER</div>
@@ -121,7 +151,7 @@ export default function Home() {
       </div>
       <div className="side">
         <p className="p-sec">Driven by integrity and backed by experience, WassimGul offers personalised legal support designed to guide you through every challenge with confidence.</p>
-        <a href="#contact" className="btn btn-solid">Learn More <span className="arw">↗</span></a>
+        <a href="/contact" className="btn btn-solid">Learn More <span className="arw">↗</span></a>
       </div>
     </div>
 
@@ -132,24 +162,20 @@ export default function Home() {
       </figure>
 
       <div className="acc" id="acc">
-        <div className="acc-item open">
-          <button className="acc-btn" aria-expanded="true">Integrity <span className="pm">+</span></button>
-          <div className="acc-panel">
-            <p>We uphold the highest ethical standards in every case we handle. Our commitment to honesty and accountability ensures trust, reliability and strong legal representation.</p>
+        {[
+          { title: "Integrity", text: "We uphold the highest ethical standards in every case we handle. Our commitment to honesty and accountability ensures trust, reliability and strong legal representation." },
+          { title: "Transparency", text: "You will always know where your case stands. We explain strategy in plain language, share costs upfront and keep you informed at every stage." },
+          { title: "Collaboration", text: "We work alongside you, not around you. Your priorities shape the strategy, and our specialists work as one team to reach the outcome you need." }
+        ].map((item, idx) => (
+          <div key={idx} className={`acc-item ${openAcc === idx ? 'open' : ''}`}>
+            <button className="acc-btn" aria-expanded={openAcc === idx} onClick={() => setOpenAcc(openAcc === idx ? -1 : idx)}>
+              {item.title} <span className="pm">{openAcc === idx ? '−' : '+'}</span>
+            </button>
+            <div className="acc-panel" style={{ display: openAcc === idx ? 'block' : 'none' }}>
+              <p>{item.text}</p>
+            </div>
           </div>
-        </div>
-        <div className="acc-item">
-          <button className="acc-btn" aria-expanded="false">Transparency <span className="pm">+</span></button>
-          <div className="acc-panel">
-            <p>You will always know where your case stands. We explain strategy in plain language, share costs upfront and keep you informed at every stage.</p>
-          </div>
-        </div>
-        <div className="acc-item">
-          <button className="acc-btn" aria-expanded="false">Collaboration <span className="pm">+</span></button>
-          <div className="acc-panel">
-            <p>We work alongside you, not around you. Your priorities shape the strategy, and our specialists work as one team to reach the outcome you need.</p>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   </div>
@@ -165,7 +191,7 @@ export default function Home() {
       </div>
       <div className="side">
         <p className="p-sec">With a commitment to excellence, we deliver defense solutions that are thoughtful, precise and focused on achieving the best possible results for our clients.</p>
-        <a href="#contact" className="btn btn-solid">All Services <span className="arw">↗</span></a>
+        <a href="/contact" className="btn btn-solid">All Services <span className="arw">↗</span></a>
       </div>
     </div>
 
@@ -174,25 +200,25 @@ export default function Home() {
         <div className="card-ico">⚖</div>
         <h3>Criminal Defense</h3>
         <p>We're here to guide you through every step of your criminal case, aiming for the best possible result.</p>
-        <a href="#contact" className="btn btn-line">Read More <span className="arw">↗</span></a>
+        <a href="/contact" className="btn btn-line">Contact Us <span className="arw">↗</span></a>
       </article>
       <article className="card">
         <div className="card-ico">◈</div>
         <h3>Corporate Law</h3>
         <p>Access straightforward, professional support for contracts, compliance and governance.</p>
-        <a href="#contact" className="btn btn-line">Read More <span className="arw">↗</span></a>
+        <a href="/contact" className="btn btn-line">Contact Us <span className="arw">↗</span></a>
       </article>
       <article className="card">
         <div className="card-ico">◇</div>
         <h3>Family Law</h3>
         <p>Our team works hard to provide expert legal help in sensitive cases and achieve the best results for you.</p>
-        <a href="#contact" className="btn btn-line">Read More <span className="arw">↗</span></a>
+        <a href="/contact" className="btn btn-line">Contact Us <span className="arw">↗</span></a>
       </article>
       <article className="card">
         <div className="card-ico">✦</div>
         <h3>Legal Consultation</h3>
         <p>Need legal help? Our experts guide you clearly, keeping you confident and informed.</p>
-        <a href="#contact" className="btn btn-line">Read More <span className="arw">↗</span></a>
+        <a href="/contact" className="btn btn-line">Contact Us <span className="arw">↗</span></a>
       </article>
     </div>
   </div>
@@ -208,7 +234,7 @@ export default function Home() {
       </div>
       <div className="side">
         <p className="p-sec">We bring together expertise, clarity and strategic thinking to deliver effective legal solutions. Every step is guided by trust, transparency and a commitment to your success.</p>
-        <a href="#contact" className="btn btn-light">View Our Team <span className="arw">↗</span></a>
+        <a href="/contact" className="btn btn-light">View Our Team <span className="arw">↗</span></a>
       </div>
     </div>
 
@@ -242,30 +268,32 @@ export default function Home() {
       </div>
       <div className="side">
         <p className="p-sec">We approach every case with strategy and experience, turning complex challenges into successful outcomes through focused and effective legal solutions.</p>
-        <a href="#contact" className="btn btn-solid">View Success Stories <span className="arw">↗</span></a>
+        <a href="/contact" className="btn btn-solid">View Success Stories <span className="arw">↗</span></a>
       </div>
     </div>
 
     <div className="stories-body">
       <div className="thumbs" id="thumbs" role="tablist" aria-label="Client stories">
-        <button className="thumb" role="tab" aria-selected="false" data-i="0">
-          <img src="https://images.unsplash.com/photo-1581065178047-8ee15951ede6?auto=format&fit=crop&w=300&q=70" alt="Priya Raman" loading="lazy" />
-        </button>
-        <button className="thumb" role="tab" aria-selected="true" data-i="1">
-          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=70" alt="Michael Anderson" loading="lazy" />
-        </button>
-        <button className="thumb" role="tab" aria-selected="false" data-i="2">
-          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=70" alt="Tom Whitaker" loading="lazy" />
-        </button>
+        {testimonials.map((test, idx) => (
+          <button 
+            key={idx}
+            className="thumb" 
+            role="tab" 
+            aria-selected={activeTest === idx} 
+            onClick={() => setActiveTest(idx)}
+          >
+            <img src={test.img} alt={test.alt} loading="lazy" />
+          </button>
+        ))}
       </div>
 
       <div className="quote" role="tabpanel">
-        <blockquote id="q-text">“Highly professional and reliable. The team handled my case with clarity and delivered exactly what I needed.”</blockquote>
-        <p className="detail" id="q-detail">From the initial consultation to the final outcome, the process was smooth and transparent. Their attention to detail, clear communication and strategic approach made a real difference in achieving the result I was looking for.</p>
+        <blockquote id="q-text">{testimonials[activeTest].quote}</blockquote>
+        <p className="detail" id="q-detail">{testimonials[activeTest].detail}</p>
         <div className="byline">
           <div>
-            <b id="q-name">Michael Anderson</b>
-            <span id="q-role">Real Estate Investor · Dubai, UAE</span>
+            <b id="q-name">{testimonials[activeTest].name}</b>
+            <span id="q-role">{testimonials[activeTest].role}</span>
           </div>
           <div className="stars" aria-label="5 out of 5">★★★★★</div>
         </div>
@@ -282,35 +310,7 @@ export default function Home() {
         <h2 className="h-sec">Schedule a consultation with our legal experts</h2>
         <p className="p-sec" style={{"marginTop":"16px"}}>Take the first step toward resolving your legal matters with confidence. Our team is ready to provide clear guidance, strategic advice and reliable support tailored to your needs.</p>
 
-        <form className="form" id="form" noValidate>
-          <div className="f-row">
-            <div className="f"><label htmlFor="fn">First Name</label><input id="fn" name="firstName" type="text" placeholder="John" required /></div>
-            <div className="f"><label htmlFor="ln">Last Name</label><input id="ln" name="lastName" type="text" placeholder="Doe" required /></div>
-          </div>
-          <div className="f-row">
-            <div className="f"><label htmlFor="em">Email Address</label><input id="em" name="email" type="email" placeholder="john@example.com" required /></div>
-            <div className="f"><label htmlFor="ph">Phone Number</label><input id="ph" name="phone" type="tel" placeholder="+44 000 000 0000" /></div>
-          </div>
-          <div className="f-row">
-            <div className="f">
-              <label htmlFor="sv">Select Service</label>
-              <select id="sv" name="service" required>
-                <option value="">Choose a service</option>
-                <option>Criminal Defense</option>
-                <option>Corporate Law</option>
-                <option>Family Law</option>
-                <option>Legal Consultation</option>
-              </select>
-            </div>
-            <div className="f"><label htmlFor="dt">Preferred Date</label><input id="dt" name="date" type="date" /></div>
-          </div>
-          <div className="f" style={{"marginBottom":"22px"}}>
-            <label htmlFor="ms">Message</label>
-            <textarea id="ms" name="message" rows="3" placeholder="Briefly describe your legal matter"></textarea>
-          </div>
-          <button type="submit" className="btn btn-solid">Confirm your appointment</button>
-          <p className="form-note" id="note" role="status"></p>
-        </form>
+        <ContactForm />
       </div>
 
       <figure className="contact-fig">
@@ -326,7 +326,7 @@ export default function Home() {
   <div className="foot-top">
     <div>
       <a href="#top" className="logo" style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', marginBottom: '16px', textDecoration: 'none' }}>
-        <img src="/wassimgul-logo.png" alt="WassimGul Logo" className="brand-img" />
+        <img src="/wassim-gul-logo.png" alt="WassimGul Logo" className="brand-img" />
         <span className="brand-txt">WassimGul<span style={{ color: 'var(--gold)' }}>.</span></span>
       </a>
       <p className="foot-tag">Reliable legal solutions focused on protecting your rights, with clarity, integrity and results.</p>
@@ -346,7 +346,7 @@ export default function Home() {
         <li><a href="#services">Services</a></li>
         <li><a href="#team">Our Team</a></li>
         <li><a href="#stories">Case Study</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a href="/contact">Contact</a></li>
       </ul>
     </div>
 
@@ -364,9 +364,10 @@ export default function Home() {
 
     <div>
       <h4>Contact Info</h4>
-      <p className="foot-c"><i>☏</i><a href="tel:+445598210518" style={{"textDecoration":"none"}}>+44 559 821 0518</a></p>
-      <p className="foot-c"><i>✉</i><a href="mailto:info@WassimGul.co.in" style={{"textDecoration":"none"}}>info@WassimGul.co.in</a></p>
-      <p className="foot-c"><i>⌖</i><span>London, United Kingdom</span></p>
+      <p className="foot-c"><i>☏</i><a href="tel:+919324689553" style={{"textDecoration":"none"}}>+91-9324689553</a></p>
+      <p className="foot-c"><i>☏</i><a href="tel:+917006323003" style={{"textDecoration":"none"}}>+91-7006323003</a></p>
+      <p className="foot-c"><i>✉</i><a href="mailto:Waseemgll@gmail.com" style={{"textDecoration":"none"}}>Waseemgll@gmail.com</a></p>
+      <p className="foot-c"><i>⌖</i><span>J&amp;K and Ladakh High Court, Srinagar</span></p>
     </div>
   </div>
 
