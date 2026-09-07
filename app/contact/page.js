@@ -1,5 +1,6 @@
 import './contact.css';
 import ContactForm from '@/app/_components/ContactForm';
+import Header from '@/app/_components/Header';
 
 export const metadata = {
   title: 'Contact Us | WassimGul — Legal Expertise',
@@ -9,27 +10,7 @@ export const metadata = {
 export default function Contact() {
   return (
     <main>
-      {/* NAVBAR */}
-      <header className="nav">
-        <div className="nav-in">
-          <a href="/" className="logo" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
-            <img src="/wassim-gul-logo.png" alt="WassimGul Logo" className="brand-img" />
-            <span className="brand-txt">WassimGul<span style={{ color: 'var(--gold)' }}>.</span></span>
-          </a>
-          <nav>
-            <ul className="nav-menu" id="menu">
-              <li><a href="/">Home</a></li>
-              <li><a href="/about">About</a></li>
-              <li><a href="/#stories">Case Study</a></li>
-              <li><a href="/#services">Services</a></li>
-              <li><a href="/contact" className="btn btn-solid">Contact Us</a></li>
-            </ul>
-          </nav>
-          <button className="burger" aria-label="Menu" aria-expanded="false" id="burger">
-            <span></span><span></span><span></span>
-          </button>
-        </div>
-      </header>
+      <Header />
 
       {/* HERO SECTION */}
       <section className="contact-hero">
