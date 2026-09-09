@@ -347,10 +347,10 @@ export default function Home() {
 
           <div>
             <h4>Contact Info</h4>
-            <p className="foot-c"><i>☏</i><a href="tel:+919324689553" style={{ "textDecoration": "none" }}>+91-9324689553</a></p>
-            <p className="foot-c"><i>☏</i><a href="tel:+917006323003" style={{ "textDecoration": "none" }}>+91-7006323003</a></p>
-            <p className="foot-c"><i>✉</i><a href="mailto:Waseemgll@gmail.com" style={{ "textDecoration": "none" }}>Waseemgll@gmail.com</a></p>
-            <p className="foot-c"><i>⌖</i><span>J&amp;K and Ladakh High Court, Srinagar</span></p>
+            <p className="foot-c"><i>☏</i><a href="tel:+919324689553" style={{ "textDecoration": "none", "color": "white" }}>+91-9324689553</a></p>
+            <p className="foot-c"><i>☏</i><a href="tel:+917006323003" style={{ "textDecoration": "none", "color": "white" }}>+91-7006323003</a></p>
+            <p className="foot-c"><i>✉</i><a href="mailto:Waseemgll@gmail.com" style={{ "textDecoration": "none", "color": "white" }}>Waseemgll@gmail.com</a></p>
+            <p className="foot-c"><i>⌖</i><span style={{ "color": "white" }}>J&amp;K and Ladakh High Court, Srinagar</span></p>
           </div>
         </div>
 

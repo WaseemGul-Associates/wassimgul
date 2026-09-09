@@ -3,7 +3,7 @@
   position: relative;
   padding: 150px 0 70px;
   background: var(--brown-deep);
-  color: #F5EEE0;
+  color: white;
   text-align: center;
   overflow: hidden;
 }
@@ -20,11 +20,12 @@
   font-weight: 700;
   letter-spacing: -0.01em;
   margin-bottom: 24px;
+  color: white;
 }
 .about-hero p {
   font-size: 1.15rem;
   line-height: 1.8;
-  color: rgba(237, 227, 210, 0.8);
+  color: white;
   max-width: 58ch;
   margin: 0 auto;
 }
@@ -71,18 +72,22 @@
 .about-values {
   padding: 120px 0;
   background: var(--brown-deep);
-  color: #F5EEE0;
+  color: white;
   text-align: center;
+}
+
+.about-values .eyebrow.on-dark {
+  color: white;
 }
 .about-values h2 {
   font-family: 'Playfair Display', serif;
   font-size: 2.2rem;
   margin-bottom: 24px;
-  color: #F5EEE0;
+  color: white;
 }
 .about-values > p {
   font-size: 1.05rem;
-  color: rgba(237, 227, 210, 0.7);
+  color: white;
   max-width: 52ch;
   margin: 0 auto;
 }
@@ -116,12 +121,12 @@
   font-family: 'Playfair Display', serif;
   font-size: 1.4rem;
   margin-bottom: 16px;
-  color: #F5EEE0;
+  color: white;
 }
 .value-card p {
   font-size: 0.95rem;
   line-height: 1.8;
-  color: rgba(237, 227, 210, 0.7);
+  color: white;
 }
 @media (max-width: 960px) {
   .about-journey-grid { grid-template-columns: 1fr; gap: 50px; }

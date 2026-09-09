@@ -309,7 +309,7 @@ a {
   bottom: 22%;
   z-index: 2;
   font-size: .85rem;
-  color: var(--muted);
+  color: var(--brown-deep);
   line-height: 1.7;
   max-width: 210px;
   text-align: left;
@@ -321,7 +321,9 @@ a {
 }
 
 .hero-side.l {
-  left: 0
+  left: 0;
+  color: var(--brown-deep);
+  z-index: 3
 }
 
 .hero-side.r {
@@ -369,7 +371,7 @@ a {
 }
 
 .mission .dim {
-  color: rgba(36, 26, 8, .3)
+  color: var(--brown-deep)
 }
 
 /* ============ STATS SECTION ============ */
@@ -923,7 +925,7 @@ a {
 /* ============ FOOTER ============ */
 .foot {
   background: var(--brown-deep);
-  color: rgba(237, 227, 210, .62);
+  color: white;
   position: relative;
   overflow: hidden
 }
@@ -940,7 +942,7 @@ a {
 }
 
 .foot .logo {
-  color: #F5EEE0;
+  color: white;
   display: inline-block;
   margin-bottom: 14px
 }
@@ -948,13 +950,14 @@ a {
 .foot-tag {
   font-size: .95rem;
   line-height: 1.8;
-  max-width: 30ch
+  max-width: 30ch;
+  color: white
 }
 
 .foot h4 {
   font-family: 'Playfair Display', serif;
   font-size: .98rem;
-  color: #F5EEE0;
+  color: white;
   font-weight: 600;
   margin-bottom: 18px
 }
@@ -969,7 +972,7 @@ a {
 .foot-links a {
   font-size: .8rem;
   text-decoration: none;
-  color: rgba(237, 227, 210, .62)
+  color: white
 }
 
 .foot-links a:hover {
@@ -981,7 +984,8 @@ a {
   gap: 10px;
   font-size: .8rem;
   line-height: 1.7;
-  margin-bottom: 13px
+  margin-bottom: 13px;
+  color: white
 }
 
 .foot-c i {
@@ -1005,7 +1009,7 @@ a {
   place-items: center;
   font-size: .72rem;
   text-decoration: none;
-  color: rgba(237, 227, 210, .62);
+  color: white;
 }
 
 .socials a:hover {
@@ -1019,7 +1023,7 @@ a {
   font-size: clamp(4rem, 16.5vw, 15rem);
   line-height: .78;
   letter-spacing: -.03em;
-  color: rgba(237, 227, 210, .07);
+  color: white;
   text-align: center;
   margin-top: 44px;
   user-select: none;
@@ -1041,6 +1045,7 @@ a {
   gap: 14px;
   flex-wrap: wrap;
   font-size: .75rem;
+  color: white
 }
 
 /* ============ RESPONSIVE ============ */
@@ -1342,7 +1347,7 @@ a {
 
 .foot .brand-txt {
   font-size: 2.1rem;
-  color: #F5EEE0;
+  color: white;
 }
 
 @media (max-width: 860px) {

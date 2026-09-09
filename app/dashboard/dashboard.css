@@ -4,25 +4,25 @@
 
 .dash-side {
   width: 264px; flex: 0 0 264px;
-  background: var(--brown-deep); color: #EDE3D2;
+  background: var(--brown-deep); color: white;
   display: flex; flex-direction: column;
   position: sticky; top: 0; height: 100vh; z-index: 40;
 }
 .dash-side-top { padding: 26px 26px 22px; border-bottom: 1px solid var(--line-light); }
 .dash-side-top .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
 .dash-side-brand-img { height: 36px; width: auto; object-fit: contain; }
-.dash-side-brand-txt { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: #F5EEE0; }
-.dash-side-tag { margin-top: 10px; font-size: 0.68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--gold-soft); }
+.dash-side-brand-txt { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: white; }
+.dash-side-tag { margin-top: 10px; font-size: 0.68rem; letter-spacing: .08em; text-transform: uppercase; color: white; }
 
 .dash-nav { flex: 1; padding: 18px 14px; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
 .dash-nav a {
   display: flex; align-items: center; gap: 10px;
   padding: 11px 14px; border-radius: 6px;
-  color: rgba(237,227,210,.75); text-decoration: none;
+  color: white; text-decoration: none;
   font-size: 0.92rem; transition: background .15s, color .15s;
 }
-.dash-nav a:hover { background: rgba(255,255,255,.06); color: #F5EEE0; }
-.dash-nav a.active { background: var(--gold); color: var(--brown-deep); font-weight: 600; }
+.dash-nav a:hover { background: rgba(255,255,255,.06); color: white; }
+.dash-nav a.active { background: var(--gold); color: white; font-weight: 600; }
 .dash-nav-badge {
   margin-left: auto; background: #b23a2a; color: #fff;
   font-size: 0.68rem; font-weight: 700; line-height: 1;
@@ -37,10 +37,10 @@
   background: var(--gold); color: var(--brown-deep);
   display: grid; place-items: center; font-weight: 700; font-size: .85rem;
 }
-.dash-user-name { font-size: 0.85rem; font-weight: 600; color: #F5EEE0; line-height: 1.3; }
-.dash-user-role { font-size: 0.7rem; color: var(--gold-soft); text-transform: capitalize; }
+.dash-user-name { font-size: 0.85rem; font-weight: 600; color: white; line-height: 1.3; }
+.dash-user-role { font-size: 0.7rem; color: white; text-transform: capitalize; }
 .dash-logout-form button {
-  width: 100%; background: rgba(255,255,255,.06); color: #EDE3D2;
+  width: 100%; background: rgba(255,255,255,.06); color: white;
   border: 1px solid var(--line-light); border-radius: 6px;
   padding: 9px; font-size: 0.82rem; cursor: pointer; font-family: inherit;
   transition: background .15s;
