@@ -6,7 +6,9 @@ import { createClient } from '@/lib/supabase/server';
 import { requireAuth, requireAdmin } from '@/lib/supabase/dal';
 import { logActivity } from '@/lib/supabase/activity';
 
-const MAX_FILE_BYTES = 20 * 1024 * 1024; // 20MB, matches next.config.mjs bodySizeLimit
+import imagekit from '@/lib/imagekit';
+
+const MAX_FILE_BYTES = 50 * 1024 * 1024; // 50MB, matches next.config.mjs bodySizeLimit
 
 function sanitizeFileName(name) {
   return name.replace(/[^a-zA-Z0-9._-]/g, '_');
@@ -119,13 +121,37 @@ export async function deleteCase(formData) {
   if (!id) return;
 
   const supabase = await createClient();
-  const caseNumber = await resolveCaseNumber(supabase, formData,id);
+  const caseNumber = await resolveCaseNumber(supabase, formData, id);
 
-  // Storage rows aren't removed by the FK cascade — clear the case's folder first.
-  const { data: files } = await supabase.storage.from('case-files').list(id);
-  if (files?.length) {
-    await supabase.storage.from('case-files').remove(files.map((f) => `${id}/${f.name}`));
+  // Clean up any files on ImageKit
+  try {
+    const { data: caseFiles } = await supabase.from('case_files').select('storage_path').eq('case_id', id);
+    if (caseFiles?.length) {
+      for (const f of caseFiles) {
+        if (f.storage_path && f.storage_path.startsWith('{')) {
+          try {
+            const parsed = JSON.parse(f.storage_path);
+            if (parsed.fileId) {
+              await imagekit.deleteFile(parsed.fileId);
+            }
+          } catch (e) {
+            console.error('Error deleting ImageKit file during case deletion:', e);
+          }
+        }
+      }
+    }
+    await imagekit.deleteFolder(`/cases/${id}`);
+  } catch (err) {
+    console.error('ImageKit folder cleanup error:', err);
   }
+
+  // Legacy Supabase storage cleanup if present
+  try {
+    const { data: files } = await supabase.storage.from('case-files').list(id);
+    if (files?.length) {
+      await supabase.storage.from('case-files').remove(files.map((f) => `${id}/${f.name}`));
+    }
+  } catch (_) {}
 
   await supabase.from('cases').delete().eq('id', id);
 
@@ -154,32 +180,53 @@ export async function uploadCaseFile(prevState, formData) {
     return { error: 'Only PDF files can be uploaded.' };
   }
   if (file.size > MAX_FILE_BYTES) {
-    return { error: 'File is too large (20MB max).' };
+    return { error: 'File is too large (50MB max).' };
   }
 
-  const storagePath = `${caseId}/${Date.now()}-${sanitizeFileName(file.name)}`;
-  const supabase = await createClient();
+  const cleanFileName = sanitizeFileName(file.name);
+  const fileBuffer = Buffer.from(await file.arrayBuffer());
 
-  const { error: uploadError } = await supabase.storage.from('case-files').upload(storagePath, file, {
-    contentType: 'application/pdf',
-  });
-  if (uploadError) {
+  let ikResult;
+  try {
+    ikResult = await imagekit.upload({
+      file: fileBuffer,
+      fileName: cleanFileName,
+      folder: `/cases/${caseId}`,
+      useUniqueFileName: true,
+    });
+  } catch (uploadError) {
+    console.error('ImageKit upload error:', uploadError);
+    return { error: uploadError?.message || 'Upload to ImageKit failed. Please try again.' };
+  }
+
+  if (!ikResult || !ikResult.url) {
     return { error: 'Upload failed. Please try again.' };
   }
 
+  const storagePayload = JSON.stringify({
+    fileId: ikResult.fileId,
+    url: ikResult.url,
+    filePath: ikResult.filePath,
+  });
+
+  const supabase = await createClient();
   const { error: insertError } = await supabase.from('case_files').insert({
     case_id: caseId,
     file_name: file.name,
-    storage_path: storagePath,
+    storage_path: storagePayload,
     file_size: file.size,
     uploaded_by: profile.id,
   });
+
   if (insertError) {
-    await supabase.storage.from('case-files').remove([storagePath]);
+    console.error('DB insert error:', insertError);
+    try {
+      if (ikResult.fileId) await imagekit.deleteFile(ikResult.fileId);
+    } catch (_) {}
     return { error: 'Could not save the file record. Please try again.' };
   }
 
-  const caseNumber = await resolveCaseNumber(supabase, formData,caseId);
+  const caseNumber = await resolveCaseNumber(supabase, formData, caseId);
   await logActivity(supabase, {
     actorId: profile.id,
     action: 'file_uploaded',
@@ -196,13 +243,31 @@ export async function deleteCaseFile(formData) {
   const fileId = String(formData.get('fileId') || '');
   const storagePath = String(formData.get('storagePath') || '');
   const caseId = String(formData.get('caseId') || '');
-  if (!fileId || !storagePath) return;
+  if (!fileId) return;
+
+  if (storagePath) {
+    if (storagePath.startsWith('{')) {
+      try {
+        const parsed = JSON.parse(storagePath);
+        if (parsed.fileId) {
+          await imagekit.deleteFile(parsed.fileId);
+        }
+      } catch (err) {
+        console.error('Error deleting ImageKit file:', err);
+      }
+    } else if (!storagePath.startsWith('http')) {
+      // Legacy Supabase storage fallback
+      try {
+        const supabase = await createClient();
+        await supabase.storage.from('case-files').remove([storagePath]);
+      } catch (_) {}
+    }
+  }
 
   const supabase = await createClient();
-  await supabase.storage.from('case-files').remove([storagePath]);
   await supabase.from('case_files').delete().eq('id', fileId);
 
-  const caseNumber = await resolveCaseNumber(supabase, formData,caseId);
+  const caseNumber = await resolveCaseNumber(supabase, formData, caseId);
   await logActivity(supabase, {
     actorId: profile.id,
     action: 'file_deleted',

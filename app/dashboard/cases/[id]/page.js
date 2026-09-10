@@ -45,10 +45,25 @@ export default async function CaseDetailPage({ params }) {
 
   const filesWithUrls = await Promise.all(
     (files || []).map(async (f) => {
-      const { data: signed } = await supabase.storage
-        .from('case-files')
-        .createSignedUrl(f.storage_path, 600);
-      return { ...f, url: signed?.signedUrl };
+      let fileUrl = null;
+      if (f.storage_path) {
+        if (f.storage_path.startsWith('{')) {
+          try {
+            const parsed = JSON.parse(f.storage_path);
+            fileUrl = parsed.url;
+          } catch (_) {}
+        } else if (f.storage_path.startsWith('http://') || f.storage_path.startsWith('https://')) {
+          fileUrl = f.storage_path;
+        } else {
+          try {
+            const { data: signed } = await supabase.storage
+              .from('case-files')
+              .createSignedUrl(f.storage_path, 600);
+            fileUrl = signed?.signedUrl;
+          } catch (_) {}
+        }
+      }
+      return { ...f, url: fileUrl };
     })
   );
 

@@ -2,8 +2,9 @@
 const nextConfig = {
   experimental: {
     serverActions: {
-      bodySizeLimit: '20mb',
+      bodySizeLimit: '50mb',
     },
+    proxyClientMaxBodySize: '50mb',
   },
   images: {
     remotePatterns: [
@@ -13,7 +14,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'res.cloudinary.com',
+        hostname: 'ik.imagekit.io',
       },
     ],
   },
