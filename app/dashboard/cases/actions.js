@@ -72,7 +72,7 @@ export async function createCase(prevState, formData) {
     description: `${profile.fullName || profile.email} created case ${caseNumber}`,
   });
 
-  revalidateDashboardPaths(data.id);
+  revalidateDashboardPaths();
   redirect(`/dashboard/cases/${data.id}`);
 }
 

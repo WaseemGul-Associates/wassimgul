@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { requireAuth } from '@/lib/supabase/dal';
@@ -6,10 +5,9 @@ import { createClient } from '@/lib/supabase/server';
 import { deleteCaseFile } from '../actions';
 import ConfirmButton from '@/app/dashboard/_components/ConfirmButton';
 import { extractFileUrl, getFileTypeCategory } from '@/lib/storage';
-
-const AddUpdateForm = dynamic(() => import('@/app/dashboard/_components/AddUpdateForm'));
-const UpdateItem = dynamic(() => import('@/app/dashboard/_components/UpdateItem'));
-const UploadFileForm = dynamic(() => import('./UploadFileForm'));
+import AddUpdateForm from '@/app/dashboard/_components/AddUpdateForm';
+import UpdateItem from '@/app/dashboard/_components/UpdateItem';
+import UploadFileForm from './UploadFileForm';
 
 
 function formatBytes(bytes) {
@@ -175,7 +173,7 @@ export default async function CaseDetailPage({ params }) {
               caseId={caseRow.id}
               caseNumber={caseRow.case_number}
               canManage={isAdmin}
-              authorName={u.profiles?.full_name}
+              authorName={Array.isArray(u.profiles) ? u.profiles[0]?.full_name : u.profiles?.full_name}
             />
           ))}
         </div>
