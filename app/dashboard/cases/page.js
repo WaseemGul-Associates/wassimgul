@@ -1,10 +1,16 @@
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { requireAuth } from '@/lib/supabase/dal';
 import { createClient } from '@/lib/supabase/server';
-import CasesTable from '@/app/dashboard/_components/CasesTable';
 import CasesFilterBar from '@/app/dashboard/_components/CasesFilterBar';
+import { TableSkeleton } from '@/app/dashboard/_components/Skeletons';
+
+const CasesTable = dynamic(() => import('@/app/dashboard/_components/CasesTable'), {
+  loading: () => <TableSkeleton rows={6} columns={5} showToolbar={false} />,
+});
 
 export const metadata = { title: 'Cases | WassimGul Portal' };
+
 
 export default async function AllCasesPage({ searchParams }) {
   const profile = await requireAuth();

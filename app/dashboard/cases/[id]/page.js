@@ -1,12 +1,16 @@
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { requireAuth } from '@/lib/supabase/dal';
 import { createClient } from '@/lib/supabase/server';
 import { deleteCaseFile } from '../actions';
 import ConfirmButton from '@/app/dashboard/_components/ConfirmButton';
-import AddUpdateForm from '@/app/dashboard/_components/AddUpdateForm';
-import UpdateItem from '@/app/dashboard/_components/UpdateItem';
-import UploadFileForm from './UploadFileForm';
+import { extractFileUrl, getFileTypeCategory } from '@/lib/storage';
+
+const AddUpdateForm = dynamic(() => import('@/app/dashboard/_components/AddUpdateForm'));
+const UpdateItem = dynamic(() => import('@/app/dashboard/_components/UpdateItem'));
+const UploadFileForm = dynamic(() => import('./UploadFileForm'));
+
 
 function formatBytes(bytes) {
   if (!bytes) return '';
@@ -14,6 +18,17 @@ function formatBytes(bytes) {
   if (kb < 1024) return `${kb.toFixed(0)} KB`;
   return `${(kb / 1024).toFixed(1)} MB`;
 }
+
+function getFileBadgeLabel(fileName) {
+  const cat = getFileTypeCategory(fileName);
+  if (cat === 'pdf') return 'PDF';
+  if (cat === 'image') {
+    const ext = (fileName || '').split('.').pop()?.toUpperCase();
+    return ext && ext.length <= 4 ? ext : 'IMG';
+  }
+  return 'FILE';
+}
+
 
 export default async function CaseDetailPage({ params }) {
   const { id } = await params;
@@ -45,23 +60,14 @@ export default async function CaseDetailPage({ params }) {
 
   const filesWithUrls = await Promise.all(
     (files || []).map(async (f) => {
-      let fileUrl = null;
-      if (f.storage_path) {
-        if (f.storage_path.startsWith('{')) {
-          try {
-            const parsed = JSON.parse(f.storage_path);
-            fileUrl = parsed.url;
-          } catch (_) {}
-        } else if (f.storage_path.startsWith('http://') || f.storage_path.startsWith('https://')) {
-          fileUrl = f.storage_path;
-        } else {
-          try {
-            const { data: signed } = await supabase.storage
-              .from('case-files')
-              .createSignedUrl(f.storage_path, 600);
-            fileUrl = signed?.signedUrl;
-          } catch (_) {}
-        }
+      let fileUrl = extractFileUrl(f.storage_path);
+      if (!fileUrl && f.storage_path && !f.storage_path.startsWith('{') && !f.storage_path.startsWith('http')) {
+        try {
+          const { data: signed } = await supabase.storage
+            .from('case-files')
+            .createSignedUrl(f.storage_path, 600);
+          fileUrl = signed?.signedUrl;
+        } catch (_) {}
       }
       return { ...f, url: fileUrl };
     })
@@ -120,7 +126,7 @@ export default async function CaseDetailPage({ params }) {
             {filesWithUrls.map((f) => (
               <div className="file-item" key={f.id}>
                 <div className="file-item-main">
-                  <div className="file-ico">PDF</div>
+                  <div className="file-ico">{getFileBadgeLabel(f.file_name)}</div>
                   <div>
                     <div className="file-name">{f.file_name}</div>
                     <div className="file-meta">
@@ -146,6 +152,7 @@ export default async function CaseDetailPage({ params }) {
             ))}
           </div>
         )}
+
 
         {isAdmin && <UploadFileForm caseId={caseRow.id} caseNumber={caseRow.case_number} />}
       </div>

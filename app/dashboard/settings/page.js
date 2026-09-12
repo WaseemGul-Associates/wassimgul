@@ -1,8 +1,12 @@
+import dynamic from 'next/dynamic';
 import { requireAdmin } from '@/lib/supabase/dal';
 import { createClient } from '@/lib/supabase/server';
-import { FirmInfoForm, ChangePasswordForm } from './SettingsForms';
+
+const FirmInfoForm = dynamic(() => import('./SettingsForms').then((mod) => mod.FirmInfoForm));
+const ChangePasswordForm = dynamic(() => import('./SettingsForms').then((mod) => mod.ChangePasswordForm));
 
 export const metadata = { title: 'Settings | WassimGul Portal' };
+
 
 export default async function SettingsPage() {
   await requireAdmin();

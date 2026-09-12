@@ -1,9 +1,12 @@
+import dynamic from 'next/dynamic';
 import { requireAdmin } from '@/lib/supabase/dal';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
-import NewUserForm from './NewUserForm';
+
+const NewUserForm = dynamic(() => import('./NewUserForm'));
 
 export const metadata = { title: 'Manage Users | WassimGul Portal' };
+
 
 export default async function UsersPage() {
   const profile = await requireAdmin();

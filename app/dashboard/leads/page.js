@@ -1,10 +1,13 @@
+import dynamic from 'next/dynamic';
 import { requireAdmin } from '@/lib/supabase/dal';
 import { createClient } from '@/lib/supabase/server';
 import { deleteLead } from './actions';
-import StatusSelect from './StatusSelect';
 import ConfirmButton from '@/app/dashboard/_components/ConfirmButton';
 
+const StatusSelect = dynamic(() => import('./StatusSelect'));
+
 export const metadata = { title: 'Leads | WassimGul Portal' };
+
 
 export default async function LeadsPage() {
   await requireAdmin();

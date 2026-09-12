@@ -10,23 +10,36 @@ export async function POST(request) {
   try {
     const profile = await requireAdmin();
     const body = await request.json();
-    const { caseId, caseNumber: caseNumberFromClient, fileId, url, filePath, fileName, fileSize } = body;
+    const { caseId, caseNumber: caseNumberFromClient, fileId, url, filePath, fileName, fileSize, storagePayload: directPayload, providers, primary } = body;
 
-    if (!caseId || !url || !fileName) {
+    if (!caseId || (!url && !directPayload) || !fileName) {
       return NextResponse.json({ error: 'Missing required file information.' }, { status: 400 });
     }
 
-    const storagePayload = JSON.stringify({
-      fileId: fileId || '',
-      url,
-      filePath: filePath || '',
-    });
+    let finalPayload = directPayload;
+    if (!finalPayload) {
+      if (providers) {
+        finalPayload = JSON.stringify({
+          version: 2,
+          primary: primary || (providers.cloudinary ? 'cloudinary' : 'imagekit'),
+          url: url || providers.cloudinary?.url || providers.imagekit?.url,
+          fileId: fileId || providers.cloudinary?.fileId || providers.imagekit?.fileId,
+          providers,
+        });
+      } else {
+        finalPayload = JSON.stringify({
+          fileId: fileId || '',
+          url,
+          filePath: filePath || '',
+        });
+      }
+    }
 
     const supabase = await createClient();
     const { error: insertError } = await supabase.from('case_files').insert({
       case_id: caseId,
       file_name: fileName,
-      storage_path: storagePayload,
+      storage_path: finalPayload,
       file_size: fileSize || 0,
       uploaded_by: profile.id,
     });
@@ -60,3 +73,4 @@ export async function POST(request) {
     return NextResponse.json({ error: err?.message || 'Server error' }, { status: 500 });
   }
 }
+

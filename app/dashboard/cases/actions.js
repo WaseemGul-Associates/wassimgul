@@ -5,14 +5,14 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { requireAuth, requireAdmin } from '@/lib/supabase/dal';
 import { logActivity } from '@/lib/supabase/activity';
+import {
+  uploadFileDual,
+  deleteFileFromStorage,
+  deleteCaseStorage,
+  isAllowedFileType,
+  MAX_FILE_BYTES,
+} from '@/lib/storage';
 
-import imagekit from '@/lib/imagekit';
-
-const MAX_FILE_BYTES = 50 * 1024 * 1024; // 50MB, matches next.config.mjs bodySizeLimit
-
-function sanitizeFileName(name) {
-  return name.replace(/[^a-zA-Z0-9._-]/g, '_');
-}
 
 // Data now surfaces in several places at once — revalidate them all together.
 function revalidateDashboardPaths(caseId) {
@@ -123,26 +123,12 @@ export async function deleteCase(formData) {
   const supabase = await createClient();
   const caseNumber = await resolveCaseNumber(supabase, formData, id);
 
-  // Clean up any files on ImageKit
+  // Clean up any files across dual storage (Cloudinary & ImageKit)
   try {
     const { data: caseFiles } = await supabase.from('case_files').select('storage_path').eq('case_id', id);
-    if (caseFiles?.length) {
-      for (const f of caseFiles) {
-        if (f.storage_path && f.storage_path.startsWith('{')) {
-          try {
-            const parsed = JSON.parse(f.storage_path);
-            if (parsed.fileId) {
-              await imagekit.deleteFile(parsed.fileId);
-            }
-          } catch (e) {
-            console.error('Error deleting ImageKit file during case deletion:', e);
-          }
-        }
-      }
-    }
-    await imagekit.deleteFolder(`/cases/${id}`);
+    await deleteCaseStorage(id, caseFiles || []);
   } catch (err) {
-    console.error('ImageKit folder cleanup error:', err);
+    console.error('Case storage cleanup error:', err);
   }
 
   // Legacy Supabase storage cleanup if present
@@ -174,46 +160,38 @@ export async function uploadCaseFile(prevState, formData) {
   const file = formData.get('file');
 
   if (!caseId || !(file instanceof File) || file.size === 0) {
-    return { error: 'Please choose a PDF file to upload.' };
+    return { error: 'Please choose an image or PDF file to upload.' };
   }
-  if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
-    return { error: 'Only PDF files can be uploaded.' };
+  if (!isAllowedFileType(file)) {
+    return { error: 'Only image (JPG, PNG, WebP, GIF, SVG) and PDF files can be uploaded.' };
   }
   if (file.size > MAX_FILE_BYTES) {
     return { error: 'File is too large (50MB max).' };
   }
 
-  const cleanFileName = sanitizeFileName(file.name);
   const fileBuffer = Buffer.from(await file.arrayBuffer());
 
-  let ikResult;
+  let uploadResult;
   try {
-    ikResult = await imagekit.upload({
-      file: fileBuffer,
-      fileName: cleanFileName,
-      folder: `/cases/${caseId}`,
-      useUniqueFileName: true,
+    uploadResult = await uploadFileDual(fileBuffer, {
+      fileName: file.name,
+      mimeType: file.type,
+      caseId,
     });
   } catch (uploadError) {
-    console.error('ImageKit upload error:', uploadError);
-    return { error: uploadError?.message || 'Upload to ImageKit failed. Please try again.' };
+    console.error('Dual upload error in action:', uploadError);
+    return { error: uploadError?.message || 'Upload failed. Please try again.' };
   }
 
-  if (!ikResult || !ikResult.url) {
+  if (!uploadResult || !uploadResult.primaryUrl) {
     return { error: 'Upload failed. Please try again.' };
   }
-
-  const storagePayload = JSON.stringify({
-    fileId: ikResult.fileId,
-    url: ikResult.url,
-    filePath: ikResult.filePath,
-  });
 
   const supabase = await createClient();
   const { error: insertError } = await supabase.from('case_files').insert({
     case_id: caseId,
     file_name: file.name,
-    storage_path: storagePayload,
+    storage_path: uploadResult.storagePayload,
     file_size: file.size,
     uploaded_by: profile.id,
   });
@@ -221,7 +199,7 @@ export async function uploadCaseFile(prevState, formData) {
   if (insertError) {
     console.error('DB insert error:', insertError);
     try {
-      if (ikResult.fileId) await imagekit.deleteFile(ikResult.fileId);
+      await deleteFileFromStorage(uploadResult.storagePayload);
     } catch (_) {}
     return { error: 'Could not save the file record. Please try again.' };
   }
@@ -246,16 +224,13 @@ export async function deleteCaseFile(formData) {
   if (!fileId) return;
 
   if (storagePath) {
-    if (storagePath.startsWith('{')) {
-      try {
-        const parsed = JSON.parse(storagePath);
-        if (parsed.fileId) {
-          await imagekit.deleteFile(parsed.fileId);
-        }
-      } catch (err) {
-        console.error('Error deleting ImageKit file:', err);
-      }
-    } else if (!storagePath.startsWith('http')) {
+    try {
+      await deleteFileFromStorage(storagePath);
+    } catch (err) {
+      console.error('Error deleting file from storage:', err);
+    }
+
+    if (!storagePath.startsWith('{') && !storagePath.startsWith('http')) {
       // Legacy Supabase storage fallback
       try {
         const supabase = await createClient();
@@ -266,6 +241,7 @@ export async function deleteCaseFile(formData) {
 
   const supabase = await createClient();
   await supabase.from('case_files').delete().eq('id', fileId);
+
 
   const caseNumber = await resolveCaseNumber(supabase, formData, caseId);
   await logActivity(supabase, {

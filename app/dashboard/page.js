@@ -1,9 +1,18 @@
+import dynamic from 'next/dynamic';
 import { requireAuth } from '@/lib/supabase/dal';
 import { createClient } from '@/lib/supabase/server';
-import AdminDashboard from './_components/AdminDashboard';
-import StaffDashboard from './_components/StaffDashboard';
+import { DashboardOverviewSkeleton } from './_components/Skeletons';
+
+const AdminDashboard = dynamic(() => import('./_components/AdminDashboard'), {
+  loading: () => <DashboardOverviewSkeleton />,
+});
+
+const StaffDashboard = dynamic(() => import('./_components/StaffDashboard'), {
+  loading: () => <DashboardOverviewSkeleton />,
+});
 
 export const metadata = { title: 'Dashboard | WassimGul Portal' };
+
 
 async function getStats(supabase) {
   const base = () => supabase.from('cases').select('id', { count: 'exact', head: true });

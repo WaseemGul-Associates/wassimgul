@@ -1,7 +1,10 @@
+import dynamic from 'next/dynamic';
 import { requireAuth } from '@/lib/supabase/dal';
 import { createClient } from '@/lib/supabase/server';
-import AddUpdateForm from '@/app/dashboard/_components/AddUpdateForm';
-import UpdateItem from '@/app/dashboard/_components/UpdateItem';
+import CaseSelectFilter from '@/app/dashboard/_components/CaseSelectFilter';
+
+const AddUpdateForm = dynamic(() => import('@/app/dashboard/_components/AddUpdateForm'));
+const UpdateItem = dynamic(() => import('@/app/dashboard/_components/UpdateItem'));
 
 export const metadata = { title: 'Daily Orders | WassimGul Portal' };
 
@@ -45,16 +48,9 @@ export default async function OrdersPage({ searchParams }) {
       <div className="dash-card">
         <div className="dash-card-head">
           <h2>All Entries</h2>
-          <form method="GET" style={{ display: 'flex', gap: 10 }}>
-            <select name="case" defaultValue={caseFilter} className="dash-select">
-              <option value="">All Cases</option>
-              {(casesForSelect || []).map((c) => (
-                <option key={c.id} value={c.id}>{c.case_number}{c.title ? ` - ${c.title}` : ''}</option>
-              ))}
-            </select>
-            <button type="submit" className="btn btn-outline btn-sm">Filter</button>
-          </form>
+          <CaseSelectFilter basePath="/dashboard/orders" currentCase={caseFilter} cases={casesForSelect} />
         </div>
+
 
         <div className="timeline">
           {(!orders || orders.length === 0) && (

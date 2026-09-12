@@ -1,5 +1,10 @@
-import DashboardLoading from '@/app/dashboard/_components/DashboardLoading';
+import { PageHeaderSkeleton, TimelineSkeleton } from '@/app/dashboard/_components/Skeletons';
 
-export default function Loading() {
-  return <DashboardLoading />;
+export default function OrdersLoading() {
+  return (
+    <>
+      <PageHeaderSkeleton titleWidth="200px" subtitleWidth="260px" />
+      <TimelineSkeleton items={5} showForm />
+    </>
+  );
 }

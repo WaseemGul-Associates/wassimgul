@@ -3,16 +3,10 @@ import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
 import { requireAdmin } from '@/lib/supabase/dal';
 import { logActivity } from '@/lib/supabase/activity';
-import imagekit from '@/lib/imagekit';
+import { uploadFileDual, deleteFileFromStorage, isAllowedFileType, MAX_FILE_BYTES } from '@/lib/storage';
 
-export const maxDuration = 60; // Allow sufficient time for large uploads
+export const maxDuration = 60; // Allow sufficient time for large dual uploads
 export const dynamic = 'force-dynamic';
-
-const MAX_FILE_BYTES = 50 * 1024 * 1024; // 50MB
-
-function sanitizeFileName(name) {
-  return name.replace(/[^a-zA-Z0-9._-]/g, '_');
-}
 
 export async function POST(request) {
   try {
@@ -23,46 +17,40 @@ export async function POST(request) {
     const file = formData.get('file');
 
     if (!caseId || !(file instanceof File) || file.size === 0) {
-      return NextResponse.json({ error: 'Please choose a PDF file to upload.' }, { status: 400 });
+      return NextResponse.json({ error: 'Please choose an image or PDF file to upload.' }, { status: 400 });
     }
-    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
-      return NextResponse.json({ error: 'Only PDF files can be uploaded.' }, { status: 400 });
+
+    if (!isAllowedFileType(file)) {
+      return NextResponse.json({ error: 'Only image (JPG, PNG, WebP, GIF, SVG) and PDF files can be uploaded.' }, { status: 400 });
     }
+
     if (file.size > MAX_FILE_BYTES) {
       return NextResponse.json({ error: 'File is too large (50MB max).' }, { status: 400 });
     }
 
-    const cleanFileName = sanitizeFileName(file.name);
     const fileBuffer = Buffer.from(await file.arrayBuffer());
 
-    let ikResult;
+    let uploadResult;
     try {
-      ikResult = await imagekit.upload({
-        file: fileBuffer,
-        fileName: cleanFileName,
-        folder: `/cases/${caseId}`,
-        useUniqueFileName: true,
+      uploadResult = await uploadFileDual(fileBuffer, {
+        fileName: file.name,
+        mimeType: file.type,
+        caseId,
       });
     } catch (uploadError) {
-      console.error('ImageKit upload error:', uploadError);
-      return NextResponse.json({ error: uploadError?.message || 'Upload to ImageKit failed. Please try again.' }, { status: 500 });
+      console.error('Dual upload service error:', uploadError);
+      return NextResponse.json({ error: uploadError?.message || 'Dual upload failed. Please try again.' }, { status: 500 });
     }
 
-    if (!ikResult || !ikResult.url) {
+    if (!uploadResult || !uploadResult.primaryUrl) {
       return NextResponse.json({ error: 'Upload failed. Please try again.' }, { status: 500 });
     }
-
-    const storagePayload = JSON.stringify({
-      fileId: ikResult.fileId,
-      url: ikResult.url,
-      filePath: ikResult.filePath,
-    });
 
     const supabase = await createClient();
     const { error: insertError } = await supabase.from('case_files').insert({
       case_id: caseId,
       file_name: file.name,
-      storage_path: storagePayload,
+      storage_path: uploadResult.storagePayload,
       file_size: file.size,
       uploaded_by: profile.id,
     });
@@ -70,7 +58,7 @@ export async function POST(request) {
     if (insertError) {
       console.error('DB insert error:', insertError);
       try {
-        if (ikResult.fileId) await imagekit.deleteFile(ikResult.fileId);
+        await deleteFileFromStorage(uploadResult.storagePayload);
       } catch (_) {}
       return NextResponse.json({ error: 'Could not save the file record. Please try again.' }, { status: 500 });
     }
@@ -93,9 +81,14 @@ export async function POST(request) {
     revalidatePath(`/dashboard/cases/${caseId}`);
     revalidatePath('/dashboard/case-files');
 
-    return NextResponse.json({ success: true, url: ikResult.url });
+    return NextResponse.json({
+      success: true,
+      url: uploadResult.primaryUrl,
+      providers: uploadResult.payloadObj?.providers,
+    });
   } catch (err) {
     console.error('Upload API route error:', err);
     return NextResponse.json({ error: err?.message || 'Unauthorized or server error' }, { status: 500 });
   }
 }
+
