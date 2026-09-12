@@ -28,6 +28,32 @@ export async function POST(request) {
       return NextResponse.json({ error: 'File is too large (50MB max).' }, { status: 400 });
     }
 
+    const supabase = await createClient();
+
+    // Resolve case details for meaningful human-readable folder naming in Google Drive
+    let folderDisplayName = '';
+    const { data: caseRow } = await supabase
+      .from('cases')
+      .select('case_number, client_name, title')
+      .eq('id', caseId)
+      .maybeSingle();
+
+    if (caseRow) {
+      if (caseRow.case_number && caseRow.client_name) {
+        folderDisplayName = `Case ${caseRow.case_number} - ${caseRow.client_name}`;
+      } else if (caseRow.case_number) {
+        folderDisplayName = `Case ${caseRow.case_number}`;
+      } else if (caseRow.client_name) {
+        folderDisplayName = `Client ${caseRow.client_name}`;
+      } else if (caseRow.title) {
+        folderDisplayName = caseRow.title;
+      }
+    }
+
+    if (!folderDisplayName && caseNumberFromForm) {
+      folderDisplayName = `Case ${caseNumberFromForm}`;
+    }
+
     const fileBuffer = Buffer.from(await file.arrayBuffer());
 
     let uploadResult;
@@ -36,6 +62,7 @@ export async function POST(request) {
         fileName: file.name,
         mimeType: file.type,
         caseId,
+        folderName: folderDisplayName,
       });
     } catch (uploadError) {
       console.error('Dual upload service error:', uploadError);
@@ -45,8 +72,6 @@ export async function POST(request) {
     if (!uploadResult || !uploadResult.primaryUrl) {
       return NextResponse.json({ error: 'Upload failed. Please try again.' }, { status: 500 });
     }
-
-    const supabase = await createClient();
     const { error: insertError } = await supabase.from('case_files').insert({
       case_id: caseId,
       file_name: file.name,

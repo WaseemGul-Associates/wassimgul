@@ -169,6 +169,28 @@ export async function uploadCaseFile(prevState, formData) {
     return { error: 'File is too large (50MB max).' };
   }
 
+  const supabase = await createClient();
+
+  // Resolve case details for meaningful human-readable folder naming in Google Drive
+  let folderDisplayName = '';
+  const { data: caseRow } = await supabase
+    .from('cases')
+    .select('case_number, client_name, title')
+    .eq('id', caseId)
+    .maybeSingle();
+
+  if (caseRow) {
+    if (caseRow.case_number && caseRow.client_name) {
+      folderDisplayName = `Case ${caseRow.case_number} - ${caseRow.client_name}`;
+    } else if (caseRow.case_number) {
+      folderDisplayName = `Case ${caseRow.case_number}`;
+    } else if (caseRow.client_name) {
+      folderDisplayName = `Client ${caseRow.client_name}`;
+    } else if (caseRow.title) {
+      folderDisplayName = caseRow.title;
+    }
+  }
+
   const fileBuffer = Buffer.from(await file.arrayBuffer());
 
   let uploadResult;
@@ -177,6 +199,7 @@ export async function uploadCaseFile(prevState, formData) {
       fileName: file.name,
       mimeType: file.type,
       caseId,
+      folderName: folderDisplayName,
     });
   } catch (uploadError) {
     console.error('Dual upload error in action:', uploadError);
@@ -186,8 +209,6 @@ export async function uploadCaseFile(prevState, formData) {
   if (!uploadResult || !uploadResult.primaryUrl) {
     return { error: 'Upload failed. Please try again.' };
   }
-
-  const supabase = await createClient();
   const { error: insertError } = await supabase.from('case_files').insert({
     case_id: caseId,
     file_name: file.name,
